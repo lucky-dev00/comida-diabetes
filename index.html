@@ -1,0 +1,2418 @@
+<!DOCTYPE html>
+<html lang="es" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>DíaSano — Organización Alimentaria y Bienestar</title>
+  <meta name="description" content="La aplicación decide con vos, no por vos. Organización alimentaria cotidiana, recetas accesibles y bienestar sin culpas ni costo.">
+  <meta name="theme-color" content="#059669">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23059669'><path d='M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm1.7-5.9-1.2 1.2a1 1 0 0 0-.5.8v.9h-2v-.9a3 3 0 0 1 .9-2.1l1.3-1.3a1.5 1.5 0 1 0-2.6-1.1H8.6a3.5 3.5 0 1 1 6.1 2.5z'/></svg>">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              200: '#a7f3d0',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+              800: '#065f46',
+              900: '#064e3b'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-stone-50 text-stone-800 dark:bg-stone-900 dark:text-stone-100 min-h-screen flex flex-col pb-24 md:pb-8 transition-colors duration-200">
+
+  <!-- ==================== HEADER SUPERIOR ==================== -->
+  <header class="sticky top-0 z-30 bg-white/95 dark:bg-stone-900/95 backdrop-blur-md border-b border-stone-200 dark:border-stone-800 px-3 sm:px-4 py-2.5">
+    <div class="max-w-6xl mx-auto flex items-center justify-between gap-2">
+      
+      <!-- Logo y Filosofía -->
+      <div class="flex items-center space-x-2.5 cursor-pointer flex-shrink-0" onclick="app.navigate('home')">
+        <div class="w-9 h-9 rounded-2xl bg-brand-600 flex items-center justify-center text-white shadow-md shadow-brand-600/20">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+          </svg>
+        </div>
+        <div>
+          <span class="text-lg font-bold tracking-tight text-stone-900 dark:text-white flex items-center gap-1.5 leading-tight">
+            DíaSano
+            <span class="text-[10px] px-1.5 py-0.2 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-900/60 dark:text-emerald-300 font-semibold">v3.0</span>
+          </span>
+          <p class="text-[11px] text-stone-500 dark:text-stone-400 hidden lg:block">La aplicación decide con vos, no por vos</p>
+        </div>
+      </div>
+
+      <!-- Navegación de Escritorio -->
+      <nav class="hidden md:flex items-center space-x-1 overflow-x-auto no-scrollbar py-1">
+        <button onclick="app.navigate('home')" id="nav-btn-home" class="nav-desktop-btn px-2.5 py-1.5 rounded-xl text-xs lg:text-sm font-semibold transition-all text-brand-700 bg-brand-50 dark:bg-brand-900/40 dark:text-brand-300 whitespace-nowrap">
+          Inicio
+        </button>
+        <button onclick="app.navigate('calendar')" id="nav-btn-calendar" class="nav-desktop-btn px-2.5 py-1.5 rounded-xl text-xs lg:text-sm font-medium transition-all text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 whitespace-nowrap">
+          📅 Calendario & Menú
+        </button>
+        <button onclick="app.navigate('diary')" id="nav-btn-diary" class="nav-desktop-btn px-2.5 py-1.5 rounded-xl text-xs lg:text-sm font-medium transition-all text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 whitespace-nowrap">
+          📝 Diario Alimentario
+        </button>
+        <button onclick="app.navigate('pantry')" id="nav-btn-pantry" class="nav-desktop-btn px-2.5 py-1.5 rounded-xl text-xs lg:text-sm font-medium transition-all text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 whitespace-nowrap">
+          🧊 Mi Despensa
+        </button>
+        <button onclick="app.navigate('shopping')" id="nav-btn-shopping" class="nav-desktop-btn px-2.5 py-1.5 rounded-xl text-xs lg:text-sm font-medium transition-all text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 whitespace-nowrap">
+          🛒 Compras
+        </button>
+        <button onclick="app.navigate('recipes')" id="nav-btn-recipes" class="nav-desktop-btn px-2.5 py-1.5 rounded-xl text-xs lg:text-sm font-medium transition-all text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 whitespace-nowrap">
+          Recetas
+        </button>
+        <button onclick="app.navigate('favorites')" id="nav-btn-favorites" class="nav-desktop-btn px-2.5 py-1.5 rounded-xl text-xs lg:text-sm font-medium transition-all text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 whitespace-nowrap">
+          Favoritos
+        </button>
+        <button onclick="app.navigate('history')" id="nav-btn-history" class="nav-desktop-btn px-2.5 py-1.5 rounded-xl text-xs lg:text-sm font-medium transition-all text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 whitespace-nowrap">
+          Historial
+        </button>
+        <button onclick="app.navigate('wellness')" id="nav-btn-wellness" class="nav-desktop-btn px-2.5 py-1.5 rounded-xl text-xs lg:text-sm font-medium transition-all text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 whitespace-nowrap">
+          🌱 Bienestar
+        </button>
+        <button onclick="app.navigate('settings')" id="nav-btn-settings" class="nav-desktop-btn px-2.5 py-1.5 rounded-xl text-xs lg:text-sm font-medium transition-all text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 whitespace-nowrap">
+          ⚙️ Ajustes & Datos
+        </button>
+      </nav>
+
+      <!-- Selector de Tema (Claro / Oscuro) e Instalación PWA -->
+      <div class="flex items-center space-x-2 flex-shrink-0">
+        <button onclick="app.triggerPWAInstall()" id="pwa-install-btn" title="Instalar DíaSano en tu dispositivo" class="hidden px-2.5 py-1.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs flex items-center gap-1.5 transition-all shadow-sm">
+          <span>📲</span> <span class="hidden sm:inline">Instalar App</span>
+        </button>
+        <button onclick="app.toggleTheme()" id="theme-toggle-btn" title="Alternar tema" class="p-2 rounded-xl border border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors">
+          <svg id="theme-icon-sun" class="w-4 h-4 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+          </svg>
+          <svg id="theme-icon-moon" class="w-4 h-4 block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+          </svg>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ==================== CONTENEDOR PRINCIPAL ==================== -->
+  <main class="flex-1 max-w-6xl w-full mx-auto p-3 sm:p-6">
+
+    <!-- ========================================================== -->
+    <!-- VISTA 1: INICIO ("¿QUÉ VAMOS A COMER HOY?")                -->
+    <!-- ========================================================== -->
+    <section id="view-home" class="space-y-6">
+      
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div>
+          <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-stone-900 dark:text-white">
+            ¿Qué vamos a comer hoy?
+          </h1>
+          <p class="text-stone-500 dark:text-stone-400 text-xs sm:text-sm mt-0.5">
+            Una propuesta concreta para decidir sin estrés, con lo que tenés y a tu ritmo.
+          </p>
+        </div>
+
+        <!-- Filtro rápido de categoría para la propuesta -->
+        <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1">
+          <button onclick="app.setProposalFilter('todas')" class="proposal-chip px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap bg-brand-600 text-white shadow-sm" data-category="todas">
+            Cualquiera
+          </button>
+          <button onclick="app.setProposalFilter('almuerzo')" class="proposal-chip px-3 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap bg-stone-100 text-stone-700 dark:bg-stone-800 dark:text-stone-300 hover:bg-stone-200" data-category="almuerzo">
+            Almuerzo
+          </button>
+          <button onclick="app.setProposalFilter('cena')" class="proposal-chip px-3 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap bg-stone-100 text-stone-700 dark:bg-stone-800 dark:text-stone-300 hover:bg-stone-200" data-category="cena">
+            Cena
+          </button>
+          <button onclick="app.setProposalFilter('desayuno')" class="proposal-chip px-3 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap bg-stone-100 text-stone-700 dark:bg-stone-800 dark:text-stone-300 hover:bg-stone-200" data-category="desayuno">
+            Desayuno
+          </button>
+          <button onclick="app.setProposalFilter('merienda')" class="proposal-chip px-3 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap bg-stone-100 text-stone-700 dark:bg-stone-800 dark:text-stone-300 hover:bg-stone-200" data-category="merienda">
+            Merienda
+          </button>
+          <button onclick="app.setProposalFilter('rapidas')" class="proposal-chip px-3 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap bg-stone-100 text-stone-700 dark:bg-stone-800 dark:text-stone-300 hover:bg-stone-200" data-category="rapidas">
+            ⚡ Rápidas (<15m)
+          </button>
+        </div>
+      </div>
+
+      <!-- TARJETA PRINCIPAL DE PROPUESTA (HERO CARD) -->
+      <div id="proposal-container" class="proposal-card bg-white dark:bg-stone-800/90 rounded-3xl border border-stone-200 dark:border-stone-700/80 overflow-hidden shadow-lg transition-all animate-fade-in">
+        <div class="p-8 text-center text-stone-400">
+          Cargando propuesta del día...
+        </div>
+      </div>
+
+      <!-- BANNER DE CLIMA Y SUGERENCIAS CONTEXTUALES (SECCIÓN 20 - OPEN-METEO) -->
+      <div id="weather-banner" class="rounded-3xl p-4 bg-gradient-to-r from-sky-50 via-teal-50 to-emerald-50 dark:from-stone-800 dark:via-stone-800/90 dark:to-stone-800 border border-sky-100 dark:border-stone-700/70 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+        <div class="flex items-center gap-3">
+          <div id="weather-icon-badge" class="w-11 h-11 rounded-2xl bg-white dark:bg-stone-700 flex items-center justify-center text-2xl shadow-sm flex-shrink-0">
+            🌤️
+          </div>
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span id="weather-city-label" class="font-bold text-stone-900 dark:text-stone-100 text-sm">Buenos Aires</span>
+              <span id="weather-temp-badge" class="px-2.5 py-0.5 rounded-full bg-sky-100 text-sky-800 dark:bg-sky-900/60 dark:text-sky-300 font-semibold text-[11px]">22°C • Templado</span>
+              <span id="weather-source-badge" class="text-[10px] text-stone-400 dark:text-stone-500">vía Open-Meteo</span>
+            </div>
+            <p id="weather-suggestion-text" class="text-stone-600 dark:text-stone-300 mt-0.5 text-xs">
+              Clima agradable para cualquier comida casera y reconfortante.
+            </p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 self-start sm:self-auto flex-shrink-0 pt-1 sm:pt-0">
+          <button onclick="app.filterByWeatherSuggestion()" id="weather-action-btn" class="px-3.5 py-2 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-semibold text-xs shadow-sm transition-colors whitespace-nowrap">
+            Ver platos frescos
+          </button>
+          <button onclick="app.openWeatherCityModal()" title="Elegir ciudad o clima" class="p-2 rounded-xl border border-sky-200 dark:border-stone-700 text-stone-600 dark:text-stone-300 hover:bg-white dark:hover:bg-stone-700 transition-colors text-xs flex items-center gap-1 font-medium">
+            <span>📍 Ciudad</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ACCESOS RÁPIDOS COTIDIANOS (ETAPA 3) -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+        
+        <div onclick="app.openLazyCookModal()" class="cursor-pointer p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200/80 dark:border-amber-900/50 hover:border-amber-400 dark:hover:border-amber-700 transition-all group shadow-sm">
+          <div class="flex items-center gap-3">
+            <span class="text-3xl">🥱</span>
+            <div>
+              <h3 class="font-bold text-amber-950 dark:text-amber-200 text-sm group-hover:text-amber-700 dark:group-hover:text-amber-100 transition-colors">
+                No tengo ganas de cocinar
+              </h3>
+              <p class="text-xs text-amber-800/80 dark:text-amber-400 mt-0.5">
+                Ideas en 5, 10, 15 min o sin cocinar, sin culpa.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div onclick="app.openSolveNowModal()" class="cursor-pointer p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200/80 dark:border-emerald-900/50 hover:border-emerald-400 dark:hover:border-emerald-700 transition-all group shadow-sm">
+          <div class="flex items-center gap-3">
+            <span class="text-3xl">⏱️</span>
+            <div>
+              <h3 class="font-bold text-emerald-950 dark:text-emerald-200 text-sm group-hover:text-emerald-700 dark:group-hover:text-emerald-100 transition-colors">
+                Resolver una comida ahora
+              </h3>
+              <p class="text-xs text-emerald-800/80 dark:text-emerald-400 mt-0.5">
+                Propuesta concreta según tu tiempo e ingredientes.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div onclick="app.openBudgetModal()" class="cursor-pointer p-4 rounded-2xl bg-sky-50 dark:bg-sky-950/30 border border-sky-200/80 dark:border-sky-900/50 hover:border-sky-400 dark:hover:border-sky-700 transition-all group shadow-sm">
+          <div class="flex items-center gap-3">
+            <span class="text-3xl">💡</span>
+            <div>
+              <h3 class="font-bold text-sky-950 dark:text-sky-200 text-sm group-hover:text-sky-700 dark:group-hover:text-sky-100 transition-colors">
+                Modo Ahorro y Sobras
+              </h3>
+              <p class="text-xs text-sky-800/80 dark:text-sky-400 mt-0.5">
+                Menú de costo mínimo y qué hacer con lo que sobró.
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ========================================================== -->
+    <!-- VISTA 2: CALENDARIO Y PLANIFICADOR SEMANAL                 -->
+    <!-- ========================================================== -->
+    <section id="view-calendar" class="space-y-6 hidden">
+      
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h2 class="text-2xl font-bold tracking-tight text-stone-900 dark:text-white flex items-center gap-2">
+            <span>📅</span> Calendario Personal y Menú
+          </h2>
+          <p class="text-stone-500 dark:text-stone-400 text-xs sm:text-sm">
+            Organiza tus comidas con anticipación sin ataduras. Cambiá de día cuando quieras.
+          </p>
+        </div>
+
+        <div class="flex items-center gap-2 flex-wrap">
+          <div class="bg-stone-200 dark:bg-stone-800 p-1 rounded-xl flex items-center text-xs font-semibold">
+            <button onclick="app.setCalendarMode('week')" id="btn-cal-week" class="px-3 py-1.5 rounded-lg bg-white dark:bg-stone-700 text-brand-700 dark:text-brand-300 shadow-sm transition-all">
+              Semana
+            </button>
+            <button onclick="app.setCalendarMode('month')" id="btn-cal-month" class="px-3 py-1.5 rounded-lg text-stone-600 dark:text-stone-400 hover:text-stone-900 transition-all">
+              Mes
+            </button>
+          </div>
+
+          <button onclick="app.openPrintWeeklyMenuModal()" class="px-3 py-1.5 rounded-xl border border-stone-200 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-700 dark:text-stone-300 text-xs font-semibold shadow-sm transition-all flex items-center gap-1.5" title="Imprimir menú semanal para la heladera">
+            <span>🖨️</span> <span>Imprimir Menú</span>
+          </button>
+
+          <button onclick="app.openPlanModal(null, null)" class="px-3 py-1.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold shadow-sm transition-all flex items-center gap-1.5">
+            <span>+</span> <span>Planificar</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Barra de navegación temporal -->
+      <div class="p-3.5 bg-white dark:bg-stone-800 rounded-2xl border border-stone-200 dark:border-stone-700 flex items-center justify-between">
+        <button onclick="app.navigateCalendarPeriod(-1)" class="p-2 rounded-xl border border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-700 text-xs font-semibold flex items-center gap-1">
+          <span>←</span> <span class="hidden sm:inline">Anterior</span>
+        </button>
+
+        <div class="text-center">
+          <span id="calendar-period-label" class="text-sm sm:text-base font-bold text-stone-900 dark:text-white block">
+            Cargando período...
+          </span>
+          <span id="calendar-period-sublabel" class="text-[11px] text-stone-400 block"></span>
+        </div>
+
+        <div class="flex items-center gap-1.5">
+          <button onclick="app.calendarGoToday()" class="px-2.5 py-1.5 rounded-xl text-xs font-semibold text-brand-600 bg-brand-50 dark:bg-brand-950/40 border border-brand-200 dark:border-brand-900">
+            Hoy
+          </button>
+          <button onclick="app.navigateCalendarPeriod(1)" class="p-2 rounded-xl border border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-700 text-xs font-semibold flex items-center gap-1">
+            <span class="hidden sm:inline">Siguiente</span> <span>→</span>
+          </button>
+        </div>
+      </div>
+
+      <div id="calendar-week-container" class="space-y-4"></div>
+      <div id="calendar-month-container" class="space-y-4 hidden"></div>
+
+      <div class="p-4 rounded-2xl bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-950/30 dark:to-teal-950/30 border border-emerald-200 dark:border-emerald-800/40 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div class="flex items-center gap-3 text-center sm:text-left">
+          <span class="text-3xl">🛒</span>
+          <div>
+            <h4 class="font-bold text-emerald-950 dark:text-emerald-200 text-sm">¿Tenés tu semana organizada?</h4>
+            <p class="text-xs text-emerald-800 dark:text-emerald-400">
+              Generá tu lista de compras sumando automáticamente los ingredientes de las recetas planificadas.
+            </p>
+          </div>
+        </div>
+        <button onclick="app.generateShoppingFromWeek()" class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold shadow-md shadow-brand-600/20 whitespace-nowrap">
+          Generar Lista de Compras
+        </button>
+      </div>
+
+    </section>
+
+    <!-- ========================================================== -->
+    <!-- VISTA 3: DIARIO ALIMENTARIO (CONSUMIDO <15 SEG)           -->
+    <!-- ========================================================== -->
+    <section id="view-diary" class="space-y-6 hidden">
+      
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h2 class="text-2xl font-bold tracking-tight text-stone-900 dark:text-white flex items-center gap-2">
+            <span>📝</span> Diario Alimentario Cotidiano
+          </h2>
+          <p class="text-stone-500 dark:text-stone-400 text-xs sm:text-sm">
+            Registrá lo que realmente comiste en segundos. Sin culpa, sin números obsesivos.
+          </p>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button onclick="app.navigateDiaryDay(-1)" class="p-2 rounded-xl border border-stone-200 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-800 text-xs">
+            ←
+          </button>
+          <input 
+            type="date" 
+            id="diary-date-picker" 
+            class="px-3 py-1.5 rounded-xl bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 text-xs font-semibold focus:outline-none"
+            onchange="app.onDiaryDateChange(this.value)"
+          >
+          <button onclick="app.navigateDiaryDay(1)" class="p-2 rounded-xl border border-stone-200 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-800 text-xs">
+            →
+          </button>
+          <button onclick="app.diaryGoToday()" class="px-2.5 py-1.5 rounded-xl text-xs font-semibold text-brand-600 bg-brand-50 dark:bg-brand-950/40 border border-brand-200 dark:border-brand-900">
+            Hoy
+          </button>
+        </div>
+      </div>
+
+      <!-- CAJA DE REGISTRO RÁPIDO (<15 segundos) -->
+      <div class="p-5 rounded-3xl bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 shadow-sm space-y-4">
+        <h3 class="font-bold text-stone-900 dark:text-white text-sm flex items-center gap-2">
+          <span>⚡</span> Registro rápido en menos de 15 segundos
+        </h3>
+
+        <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1">
+          <button onclick="app.setDiaryQuickMeal('desayuno')" id="diary-quick-desayuno" class="diary-meal-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-brand-600 text-white">
+            🌅 Desayuno
+          </button>
+          <button onclick="app.setDiaryQuickMeal('almuerzo')" id="diary-quick-almuerzo" class="diary-meal-btn px-3 py-1.5 rounded-xl text-xs font-medium bg-stone-100 dark:bg-stone-700 text-stone-700 dark:text-stone-300">
+            ☀️ Almuerzo
+          </button>
+          <button onclick="app.setDiaryQuickMeal('merienda')" id="diary-quick-merienda" class="diary-meal-btn px-3 py-1.5 rounded-xl text-xs font-medium bg-stone-100 dark:bg-stone-700 text-stone-700 dark:text-stone-300">
+            ☕ Merienda
+          </button>
+          <button onclick="app.setDiaryQuickMeal('cena')" id="diary-quick-cena" class="diary-meal-btn px-3 py-1.5 rounded-xl text-xs font-medium bg-stone-100 dark:bg-stone-700 text-stone-700 dark:text-stone-300">
+            🌙 Cena
+          </button>
+          <button onclick="app.setDiaryQuickMeal('snack')" id="diary-quick-snack" class="diary-meal-btn px-3 py-1.5 rounded-xl text-xs font-medium bg-stone-100 dark:bg-stone-700 text-stone-700 dark:text-stone-300">
+            🍎 Snack
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-12 gap-2">
+          <div class="sm:col-span-7">
+            <input 
+              type="text" 
+              id="diary-input-name" 
+              placeholder="¿Qué comiste? (ej: Milanesas con ensalada, 2 tostadas con café)..."
+              class="w-full px-3.5 py-2.5 rounded-xl bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
+            >
+          </div>
+
+          <div class="sm:col-span-3">
+            <select id="diary-input-portion" class="w-full px-3 py-2.5 rounded-xl bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-xs focus:outline-none">
+              <option value="Porción normal">Porción normal</option>
+              <option value="Media porción">Media porción / liviana</option>
+              <option value="Porción abundante">Porción abundante / generosa</option>
+            </select>
+          </div>
+
+          <div class="sm:col-span-2">
+            <button onclick="app.saveQuickDiaryEntry()" class="w-full h-full py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold shadow-sm transition-all flex items-center justify-center gap-1">
+              <span>Guardar</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between text-[11px] text-stone-400">
+          <span>Opcional: podés escribir libremente o elegir de tus recetas favoritas.</span>
+          <span class="italic">Se guarda al instante en tu dispositivo.</span>
+        </div>
+      </div>
+
+      <!-- RESUMEN DEL DÍA -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+        <div class="p-3.5 rounded-2xl bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700">
+          <span class="text-xs text-stone-400 block">Comidas registradas hoy:</span>
+          <span id="diary-count-val" class="text-xl font-bold text-stone-900 dark:text-white">0</span>
+        </div>
+        <div class="p-3.5 rounded-2xl bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700">
+          <span class="text-xs text-stone-400 block">Carbohidratos est. totales:</span>
+          <span id="diary-carbs-val" class="text-xl font-bold text-brand-600 dark:text-brand-400">~0 g</span>
+          <span class="text-[10px] text-stone-400 block">referencia orientativa</span>
+        </div>
+        <div class="col-span-2 sm:col-span-1 p-3.5 rounded-2xl bg-emerald-50/70 dark:bg-emerald-950/20 border border-emerald-100 dark:border-emerald-900/40 flex items-center gap-2">
+          <span class="text-2xl">🌱</span>
+          <p class="text-[11px] text-emerald-800 dark:text-emerald-300 leading-snug">
+            Registrar tus comidas te ayuda a ser consciente, no a juzgarte ni castigarte.
+          </p>
+        </div>
+      </div>
+
+      <!-- LISTA DE COMIDAS REGISTRADAS DEL DÍA -->
+      <div class="space-y-3">
+        <h3 class="font-bold text-stone-900 dark:text-white text-sm">
+          Comidas consumidas en la fecha seleccionada
+        </h3>
+        <div id="diary-entries-container" class="space-y-2"></div>
+      </div>
+
+    </section>
+
+    <!-- ========================================================== -->
+    <!-- VISTA 4: MI DESPENSA Y HELADERA (ETAPA 3)                  -->
+    <!-- ========================================================== -->
+    <section id="view-pantry" class="space-y-6 hidden">
+      
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h2 class="text-2xl font-bold tracking-tight text-stone-900 dark:text-white flex items-center gap-2">
+            <span>🧊</span> Mi Despensa y Heladera
+          </h2>
+          <p class="text-stone-500 dark:text-stone-400 text-xs sm:text-sm">
+            Registrá lo que tenés en casa para aprovecharlo antes de comprar de más o tirar comida.
+          </p>
+        </div>
+
+        <div class="flex items-center gap-2 flex-wrap">
+          <button onclick="app.findRecipesFromPantry()" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-md shadow-emerald-600/20 flex items-center gap-1.5 transition-all">
+            <span>🍳</span> <span>¿Qué puedo cocinar con lo que tengo?</span>
+          </button>
+          <button onclick="app.openAddPantryModal()" class="px-3 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold shadow-sm flex items-center gap-1 transition-all">
+            <span>+</span> <span>Agregar alimento</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ALERTA DE VENCIMIENTOS INTELIGENTE -->
+      <div id="pantry-expiry-alert-box" class="hidden"></div>
+
+      <!-- FILTROS Y RESUMEN -->
+      <div class="p-4 rounded-2xl bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar text-xs">
+          <button onclick="app.setPantryFilter('all')" class="pantry-filter-btn px-3 py-1.5 rounded-xl font-semibold bg-brand-600 text-white" data-loc="all">Todos</button>
+          <button onclick="app.setPantryFilter('heladera')" class="pantry-filter-btn px-3 py-1.5 rounded-xl font-medium bg-stone-100 dark:bg-stone-700 text-stone-700 dark:text-stone-300" data-loc="heladera">🧊 Heladera</button>
+          <button onclick="app.setPantryFilter('alacena')" class="pantry-filter-btn px-3 py-1.5 rounded-xl font-medium bg-stone-100 dark:bg-stone-700 text-stone-700 dark:text-stone-300" data-loc="alacena">🥫 Alacena</button>
+          <button onclick="app.setPantryFilter('freezer')" class="pantry-filter-btn px-3 py-1.5 rounded-xl font-medium bg-stone-100 dark:bg-stone-700 text-stone-700 dark:text-stone-300" data-loc="freezer">❄️ Freezer</button>
+          <button onclick="app.setPantryFilter('expiring')" class="pantry-filter-btn px-3 py-1.5 rounded-xl font-medium bg-stone-100 dark:bg-stone-700 text-stone-700 dark:text-stone-300" data-loc="expiring">⚠️ Por vencer</button>
+        </div>
+
+        <button onclick="app.syncPantryWithShopping()" class="text-xs text-brand-600 dark:text-brand-400 font-semibold hover:underline flex items-center gap-1 self-start sm:self-auto">
+          <span>✓</span> <span>Descontar existentes de la Lista de Compras</span>
+        </button>
+      </div>
+
+      <!-- CUADRÍCULA DE ALIMENTOS EN DESPENSA -->
+      <div id="pantry-items-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+
+    </section>
+
+    <!-- ========================================================== -->
+    <!-- VISTA 5: LISTA DE COMPRAS INTELIGENTE                      -->
+    <!-- ========================================================== -->
+    <section id="view-shopping" class="space-y-6 hidden">
+      
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h2 class="text-2xl font-bold tracking-tight text-stone-900 dark:text-white flex items-center gap-2">
+            <span>🛒</span> Lista de Compras Inteligente
+          </h2>
+          <p class="text-stone-500 dark:text-stone-400 text-xs sm:text-sm">
+            Ingredientes agrupados por sector para comprar rápido y sin olvidos.
+          </p>
+        </div>
+
+        <div class="flex items-center gap-2 flex-wrap">
+          <button onclick="app.generateShoppingFromWeek()" class="px-3 py-1.5 rounded-xl border border-brand-500 text-brand-600 dark:text-brand-400 hover:bg-brand-50 dark:hover:bg-brand-950/30 text-xs font-semibold flex items-center gap-1 transition-colors">
+            <span>🔄</span> <span>Actualizar del Menú Semanal</span>
+          </button>
+          <button onclick="app.openAddShoppingModal()" class="px-3 py-1.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold shadow-sm transition-all flex items-center gap-1">
+            <span>+</span> <span>Agregar producto</span>
+          </button>
+          <button onclick="app.shareShoppingWhatsApp()" class="px-3 py-1.5 rounded-xl border border-emerald-500 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/30 text-xs font-semibold flex items-center gap-1 transition-colors">
+            <span>📲</span> <span>Enviar por WhatsApp</span>
+          </button>
+          <button onclick="app.copyShoppingList()" class="px-3 py-1.5 rounded-xl border border-stone-200 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-600 dark:text-stone-300 text-xs font-semibold flex items-center gap-1 transition-colors">
+            <span>📋</span> <span>Copiar texto</span>
+          </button>
+          <button onclick="app.clearCompletedShopping()" class="px-3 py-1.5 rounded-xl border border-stone-200 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-500 text-xs font-semibold transition-colors">
+            Limpiar comprados
+          </button>
+        </div>
+      </div>
+
+      <!-- MODO AHORRO Y PRESUPUESTO (SECCIÓN 7) -->
+      <div class="p-4 rounded-3xl bg-gradient-to-r from-emerald-50 via-teal-50 to-emerald-50/70 dark:from-stone-800 dark:via-stone-800/90 dark:to-stone-800 border border-emerald-200/80 dark:border-stone-700 space-y-3">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div class="flex items-center gap-2.5">
+            <span class="text-2xl">💰</span>
+            <div>
+              <h3 class="font-bold text-stone-900 dark:text-white text-xs sm:text-sm">Presupuesto y Modo Ahorro Semanal</h3>
+              <p class="text-[11px] text-stone-500 dark:text-stone-400">Controlá tus gastos aproximados y maximizá tu ahorro con ingredientes accesibles.</p>
+            </div>
+          </div>
+          <button onclick="app.generateBudgetWeeklyPlan()" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm flex items-center gap-1.5 transition-colors self-start sm:self-auto">
+            <span>✨</span> <span>Quiero gastar lo menos posible esta semana</span>
+          </button>
+        </div>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1 text-xs">
+          <div class="bg-white dark:bg-stone-900 p-3 rounded-2xl border border-stone-200 dark:border-stone-700">
+            <label class="block text-[11px] text-stone-500 mb-1 font-medium">Presupuesto semanal ($ aprox.):</label>
+            <div class="flex items-center gap-1">
+              <span class="font-bold text-stone-400">$</span>
+              <input type="number" id="weekly-budget-input" value="25000" min="0" step="1000" class="w-full bg-transparent font-bold text-stone-900 dark:text-white text-sm outline-none" onchange="app.saveWeeklyBudget(this.value)">
+            </div>
+          </div>
+          <div class="bg-white dark:bg-stone-900 p-3 rounded-2xl border border-stone-200 dark:border-stone-700">
+            <span class="block text-[11px] text-stone-500 mb-1 font-medium">Gasto estimado en lista:</span>
+            <span id="shopping-estimated-cost" class="font-bold text-stone-900 dark:text-white text-sm">$0</span>
+          </div>
+          <div class="bg-white dark:bg-stone-900 p-3 rounded-2xl border border-stone-200 dark:border-stone-700 flex items-center justify-between">
+            <div>
+              <span class="block text-[11px] text-stone-500 font-medium">Estado del presupuesto:</span>
+              <span id="budget-status-badge" class="font-bold text-emerald-600 text-xs">Dentro del presupuesto</span>
+            </div>
+            <span id="budget-status-icon" class="text-xl">🟢</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== APARTADO DE LISTA DE COMPRAS AUTOMÁTICA ==================== -->
+      <div class="p-5 rounded-3xl bg-white dark:bg-stone-850 border border-brand-200 dark:border-brand-900/60 shadow-sm space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-2xl bg-brand-100 dark:bg-brand-950/60 text-brand-700 dark:text-brand-300 flex items-center justify-center text-xl flex-shrink-0">
+              ⚡
+            </div>
+            <div>
+              <h3 class="font-bold text-stone-900 dark:text-white text-sm sm:text-base">
+                Generador Automático de Lista de Compras
+              </h3>
+              <p class="text-xs text-stone-500 dark:text-stone-400">
+                Añade automáticamente los ingredientes necesarios cruzando con tu heladera/despensa para no comprar lo que ya tenés.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3 Tarjetas de Acciones Rápidas Automáticas -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1 text-xs">
+          <!-- Acción 1: Desde el menú semanal -->
+          <div class="p-3.5 rounded-2xl bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 flex flex-col justify-between space-y-2.5">
+            <div>
+              <span class="font-bold text-stone-900 dark:text-white block text-xs flex items-center gap-1.5">
+                <span>📅</span> <span>Menú de la Semana</span>
+              </span>
+              <p class="text-[11px] text-stone-500 dark:text-stone-400 mt-1">
+                Suma todos los ingredientes de tus recetas planificadas, descontando automáticamente lo que ya tenés en casa.
+              </p>
+            </div>
+            <button onclick="app.autoGenerateShoppingFromWeek(true)" class="w-full py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-[11px] shadow-sm transition-colors flex items-center justify-center gap-1">
+              <span>+</span> <span>Añadir ingredientes de la semana</span>
+            </button>
+          </div>
+
+          <!-- Acción 2: Desde una receta específica -->
+          <div class="p-3.5 rounded-2xl bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 flex flex-col justify-between space-y-2.5">
+            <div>
+              <span class="font-bold text-stone-900 dark:text-white block text-xs flex items-center gap-1.5">
+                <span>🍳</span> <span>Desde Receta Específica</span>
+              </span>
+              <p class="text-[11px] text-stone-500 dark:text-stone-400 mt-1">
+                Elegí cualquier receta de la biblioteca o casera y volcá todos sus ingredientes a la lista en un toque.
+              </p>
+            </div>
+            <button onclick="app.openSelectRecipeForShoppingModal()" class="w-full py-2 rounded-xl border border-purple-500 text-purple-700 dark:text-purple-300 font-semibold hover:bg-purple-50 dark:hover:bg-purple-950/40 text-[11px] transition-colors flex items-center justify-center gap-1">
+              <span>+</span> <span>Elegir receta para sumar</span>
+            </button>
+          </div>
+
+          <!-- Acción 3: Reponer lo que se está acabando -->
+          <div class="p-3.5 rounded-2xl bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 flex flex-col justify-between space-y-2.5">
+            <div>
+              <span class="font-bold text-stone-900 dark:text-white block text-xs flex items-center gap-1.5">
+                <span>⚠️</span> <span>Reponer Despensa</span>
+              </span>
+              <p class="text-[11px] text-stone-500 dark:text-stone-400 mt-1">
+                Añade automáticamente a las compras los alimentos que marcaste como "Está por acabarse" en tu despensa.
+              </p>
+            </div>
+            <button onclick="app.addRunningOutPantryToShopping()" class="w-full py-2 rounded-xl border border-amber-500 text-amber-700 dark:text-amber-300 font-semibold hover:bg-amber-50 dark:hover:bg-amber-950/40 text-[11px] transition-colors flex items-center justify-center gap-1">
+              <span>+</span> <span>Añadir productos por acabarse</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Barra de progreso de compras -->
+      <div class="p-4 rounded-2xl bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 space-y-2">
+        <div class="flex items-center justify-between text-xs font-semibold">
+          <span class="text-stone-600 dark:text-stone-300">Progreso de compras:</span>
+          <span id="shopping-progress-text" class="text-brand-600 dark:text-brand-400">0 de 0 productos</span>
+        </div>
+        <div class="w-full bg-stone-100 dark:bg-stone-700 rounded-full h-2 overflow-hidden">
+          <div id="shopping-progress-bar" class="bg-brand-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <!-- Contenedor agrupado de ingredientes -->
+      <div id="shopping-grouped-container" class="space-y-4"></div>
+
+    </section>
+
+    <!-- ========================================================== -->
+    <!-- VISTA 6: BIBLIOTECA DE RECETAS (EXPLORADOR)                -->
+    <!-- ========================================================== -->
+    <section id="view-recipes" class="space-y-6 hidden">
+      
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h2 class="text-2xl font-bold tracking-tight text-stone-900 dark:text-white">
+            Biblioteca de Recetas Cotidianas
+          </h2>
+          <p class="text-stone-500 dark:text-stone-400 text-xs sm:text-sm">
+            50 preparaciones reales con ingredientes accesibles en Argentina, más tus propias recetas caseras.
+          </p>
+        </div>
+        <div class="flex items-center gap-2 flex-wrap self-start sm:self-auto">
+          <div id="recipe-count-badge" class="px-3 py-1 bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 rounded-full text-xs font-semibold">
+            Cargando recetas...
+          </div>
+          <button onclick="app.openCustomRecipeModal()" class="px-3.5 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs shadow-md shadow-purple-600/20 flex items-center gap-1.5 transition-colors">
+            <span>+</span> <span>Crear Mi Receta</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Buscador y Filtros -->
+      <div class="space-y-3 bg-white dark:bg-stone-800 p-4 rounded-2xl border border-stone-200 dark:border-stone-700">
+        
+        <div class="relative">
+          <svg class="w-5 h-5 absolute left-3.5 top-3 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <input 
+            type="text" 
+            id="recipe-search-input" 
+            placeholder="Buscar por nombre o ingrediente (ej: pollo, zapallito, avena, lentejas)..." 
+            class="w-full pl-11 pr-4 py-2.5 rounded-xl bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
+            oninput="app.filterRecipes()"
+          >
+        </div>
+
+        <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1 text-xs">
+          <button onclick="app.setLibraryCategory('all')" class="cat-filter-btn px-3 py-1.5 rounded-xl font-semibold bg-brand-600 text-white" data-cat="all">Todas</button>
+          <button onclick="app.setLibraryCategory('custom')" class="cat-filter-btn px-3 py-1.5 rounded-xl font-medium bg-purple-100 text-purple-800 dark:bg-purple-950/60 dark:text-purple-300" data-cat="custom">⭐ Mis Recetas</button>
+          <button onclick="app.setLibraryCategory('almuerzo')" class="cat-filter-btn px-3 py-1.5 rounded-xl font-medium bg-stone-100 text-stone-700 dark:bg-stone-700 dark:text-stone-300" data-cat="almuerzo">Almuerzos</button>
+          <button onclick="app.setLibraryCategory('cena')" class="cat-filter-btn px-3 py-1.5 rounded-xl font-medium bg-stone-100 text-stone-700 dark:bg-stone-700 dark:text-stone-300" data-cat="cena">Cenas</button>
+          <button onclick="app.setLibraryCategory('desayuno')" class="cat-filter-btn px-3 py-1.5 rounded-xl font-medium bg-stone-100 text-stone-700 dark:bg-stone-700 dark:text-stone-300" data-cat="desayuno">Desayunos</button>
+          <button onclick="app.setLibraryCategory('merienda')" class="cat-filter-btn px-3 py-1.5 rounded-xl font-medium bg-stone-100 text-stone-700 dark:bg-stone-700 dark:text-stone-300" data-cat="merienda">Meriendas</button>
+          <button onclick="app.setLibraryCategory('snack')" class="cat-filter-btn px-3 py-1.5 rounded-xl font-medium bg-stone-100 text-stone-700 dark:bg-stone-700 dark:text-stone-300" data-cat="snack">Snacks</button>
+        </div>
+
+        <div class="flex items-center gap-2 pt-1 border-t border-stone-100 dark:border-stone-700/60 overflow-x-auto no-scrollbar text-xs">
+          <span class="text-stone-400 font-medium">Etiquetas:</span>
+          <button onclick="app.toggleTagFilter('economica')" id="tag-economica" class="px-2.5 py-1 rounded-lg border border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-700">💰 Económicas</button>
+          <button onclick="app.toggleTagFilter('rapida')" id="tag-rapida" class="px-2.5 py-1 rounded-lg border border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-700">⚡ Rápidas</button>
+          <button onclick="app.toggleTagFilter('sin_horno')" id="tag-sin_horno" class="px-2.5 py-1 rounded-lg border border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-700">🍳 Sin horno</button>
+          <button onclick="app.toggleTagFilter('sin_cocinar')" id="tag-sin_cocinar" class="px-2.5 py-1 rounded-lg border border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-700">🥗 Sin cocinar</button>
+          <button onclick="app.toggleTagFilter('baja_carbos')" id="tag-baja_carbos" class="px-2.5 py-1 rounded-lg border border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-700">🌱 Bajas en carbos</button>
+        </div>
+
+      </div>
+
+      <!-- Cuadrícula de recetas -->
+      <div id="recipes-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+
+    </section>
+
+    <!-- ========================================================== -->
+    <!-- VISTA 7: FAVORITOS                                         -->
+    <!-- ========================================================== -->
+    <section id="view-favorites" class="space-y-6 hidden">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h2 class="text-2xl font-bold tracking-tight text-stone-900 dark:text-white">
+            Mis Recetas y Comidas Favoritas
+          </h2>
+          <p class="text-stone-500 dark:text-stone-400 text-xs sm:text-sm">
+            Tus comidas preferidas y platos habituales para acceder rápido o sumar al menú semanal.
+          </p>
+        </div>
+        <button onclick="app.openAddCustomFavoriteModal()" class="self-start sm:self-auto px-3.5 py-1.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs shadow-md shadow-brand-600/20 flex items-center gap-1.5 transition-colors">
+          <span>+</span> <span>Agregar Comida Habitual</span>
+        </button>
+      </div>
+
+      <div id="favorites-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+    </section>
+
+    <!-- ========================================================== -->
+    <!-- VISTA 8: HISTORIAL                                         -->
+    <!-- ========================================================== -->
+    <section id="view-history" class="space-y-6 hidden">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h2 class="text-2xl font-bold tracking-tight text-stone-900 dark:text-white">
+            Recetas que consultaste recientemente
+          </h2>
+          <p class="text-stone-500 dark:text-stone-400 text-xs mt-0.5">
+            Historial de recetas exploradas. Consultar una receta no significa que la hayas consumido.
+          </p>
+        </div>
+        <button onclick="app.clearHistory()" class="self-start sm:self-auto text-xs px-3 py-1.5 rounded-xl border border-red-200 text-red-600 hover:bg-red-50 dark:border-red-900/50 dark:text-red-400 dark:hover:bg-red-950/30 transition-colors">
+          Limpiar historial
+        </button>
+      </div>
+
+      <div id="history-container" class="space-y-3"></div>
+    </section>
+
+    <!-- ========================================================== -->
+    <!-- VISTA 9: BIENESTAR & SALUD PERSONAL (ETAPA 4)              -->
+    <!-- ========================================================== -->
+    <section id="view-wellness" class="space-y-6 hidden">
+      
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h2 class="text-2xl font-bold tracking-tight text-stone-900 dark:text-white">
+            Bienestar & Salud Personal
+          </h2>
+          <p class="text-stone-500 dark:text-stone-400 text-xs sm:text-sm mt-0.5">
+            Herramientas opcionales que te acompañan a tu ritmo, sin juzgarte y sin presiones.
+          </p>
+        </div>
+
+        <!-- Selector de Sub-pestañas de Bienestar -->
+        <div class="flex items-center gap-1.5 bg-stone-100 dark:bg-stone-800 p-1 rounded-2xl flex-shrink-0 self-start sm:self-auto overflow-x-auto no-scrollbar">
+          <button onclick="app.setWellnessSubtab('glucose')" id="wellness-subtab-btn-glucose" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-stone-700 text-brand-700 dark:text-brand-300 shadow-sm transition-all whitespace-nowrap">
+            🩸 Glucosa
+          </button>
+          <button onclick="app.setWellnessSubtab('activity')" id="wellness-subtab-btn-activity" class="px-3 py-1.5 rounded-xl text-xs font-medium text-stone-600 dark:text-stone-300 hover:text-stone-900 dark:hover:text-white transition-all whitespace-nowrap">
+            🏃 Actividad & Metas
+          </button>
+          <button onclick="app.setWellnessSubtab('emotional')" id="wellness-subtab-btn-emotional" class="px-3 py-1.5 rounded-xl text-xs font-medium text-stone-600 dark:text-stone-300 hover:text-stone-900 dark:hover:text-white transition-all whitespace-nowrap">
+            🧘 Mi Espacio Privado
+          </button>
+        </div>
+      </div>
+
+      <!-- ==================== SUB-PANEL 1: GLUCOSA (SECCIÓN 16) ==================== -->
+      <div id="wellness-panel-glucose" class="space-y-6">
+        
+        <!-- AVISO MÉDICO OBLIGATORIO (SECCIÓN 16) -->
+        <div class="p-4 rounded-3xl bg-amber-50/80 dark:bg-amber-950/20 border border-amber-200/80 dark:border-amber-900/40 text-amber-900 dark:text-amber-200 text-xs flex items-start gap-3">
+          <span class="text-xl flex-shrink-0">⚠️</span>
+          <div>
+            <span class="font-bold">Aviso importante:</span> DíaSano es una herramienta personal de apoyo y registro cotidiano. No es un dispositivo médico, no calcula dosis de insulina ni sustituye las indicaciones de tu médico o diabetólogo. Los rangos son únicamente de referencia personal.
+          </div>
+        </div>
+
+        <!-- TARJETA DE RANGOS Y ACCIONES DE GLUCOSA -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="p-5 rounded-3xl bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 shadow-sm flex flex-col justify-between">
+            <div>
+              <span class="text-xs font-medium text-stone-500 dark:text-stone-400">Tus rangos de referencia</span>
+              <div class="mt-2 space-y-1">
+                <div class="flex items-center justify-between text-xs">
+                  <span class="text-stone-600 dark:text-stone-300">En ayunas / Basal:</span>
+                  <span id="label-glucose-fasting" class="font-bold text-stone-800 dark:text-stone-100">70 - 130 mg/dL</span>
+                </div>
+                <div class="flex items-center justify-between text-xs">
+                  <span class="text-stone-600 dark:text-stone-300">Posprandial (2h):</span>
+                  <span id="label-glucose-post" class="font-bold text-stone-800 dark:text-stone-100">&lt; 180 mg/dL</span>
+                </div>
+              </div>
+            </div>
+            <button onclick="app.openGlucoseSettingsModal()" class="mt-4 text-xs font-semibold text-brand-600 dark:text-brand-400 hover:underline text-left">
+              ⚙️ Ajustar mis rangos objetivo
+            </button>
+          </div>
+
+          <div class="p-5 rounded-3xl bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 shadow-sm flex flex-col justify-between">
+            <div>
+              <span class="text-xs font-medium text-stone-500 dark:text-stone-400">Lecturas en rango (últimos 14 días)</span>
+              <div class="mt-2 flex items-baseline gap-2">
+                <span id="label-glucose-percentage" class="text-3xl font-extrabold text-emerald-600 dark:text-emerald-400">--%</span>
+                <span id="label-glucose-count" class="text-xs text-stone-500 dark:text-stone-400">0 registros</span>
+              </div>
+              <p class="text-[11px] text-stone-500 dark:text-stone-400 mt-1">
+                Cada lectura ayuda a conocer cómo responde tu organismo a diferentes comidas y descansos.
+              </p>
+            </div>
+          </div>
+
+          <div class="p-5 rounded-3xl bg-gradient-to-br from-brand-600 to-emerald-700 text-white shadow-md shadow-brand-600/20 flex flex-col justify-between">
+            <div>
+              <h3 class="font-bold text-base">Registrar Glucosa</h3>
+              <p class="text-brand-100 text-xs mt-1">
+                Anotá una medición en segundos indicando momento y comida asociada si deseás.
+              </p>
+            </div>
+            <button onclick="app.openGlucoseRecordModal()" class="mt-4 w-full py-2.5 rounded-2xl bg-white text-brand-700 font-bold text-xs hover:bg-brand-50 transition-colors shadow-sm">
+              + Nueva Medición
+            </button>
+          </div>
+        </div>
+
+        <!-- GRÁFICO VISUAL DE GLUCOSA (SVG PURO) -->
+        <div class="p-5 rounded-3xl bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 shadow-sm space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="font-bold text-stone-900 dark:text-white text-sm">
+              Evolución de mediciones recientes
+            </h3>
+            <span class="text-[11px] text-stone-400">Franja verde = Tu rango objetivo</span>
+          </div>
+
+          <!-- Contenedor del SVG -->
+          <div id="glucose-chart-container" class="w-full h-48 overflow-hidden flex items-center justify-center bg-stone-50 dark:bg-stone-900/50 rounded-2xl border border-stone-100 dark:border-stone-800 p-2">
+            <span class="text-xs text-stone-400">Aún no hay mediciones registradas. ¡Sumá la primera!</span>
+          </div>
+        </div>
+
+        <!-- HISTORIAL DE MEDICIONES RECIENTES -->
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="font-bold text-stone-900 dark:text-white text-sm">
+              Historial de Mediciones
+            </h3>
+            <span id="glucose-records-count-badge" class="text-xs text-stone-500">0 mediciones</span>
+          </div>
+          <div id="glucose-records-list" class="space-y-2.5">
+            <!-- Items de glucosa renderizados dinámicamente -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ==================== SUB-PANEL 2: ACTIVIDAD & HÁBITOS (SECCIÓN 17) ==================== -->
+      <div id="wellness-panel-activity" class="space-y-6 hidden">
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="p-5 rounded-3xl bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 shadow-sm">
+            <span class="text-xs font-medium text-stone-500 dark:text-stone-400">Minutos activos esta semana</span>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span id="label-activity-minutes" class="text-3xl font-extrabold text-brand-600 dark:text-brand-400">0</span>
+              <span class="text-xs text-stone-500 dark:text-stone-400">minutos</span>
+            </div>
+            <p class="text-[11px] text-stone-500 dark:text-stone-400 mt-1">
+              Cualquier movimiento cuenta: pasear, bailar, tareas cotidianas o entrenar.
+            </p>
+          </div>
+
+          <div class="p-5 rounded-3xl bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 shadow-sm">
+            <span class="text-xs font-medium text-stone-500 dark:text-stone-400">Días con movimiento</span>
+            <div class="mt-2 flex items-baseline gap-2">
+              <span id="label-activity-days" class="text-3xl font-extrabold text-amber-600 dark:text-amber-400">0</span>
+              <span class="text-xs text-stone-500 dark:text-stone-400">días</span>
+            </div>
+            <p class="text-[11px] text-stone-500 dark:text-stone-400 mt-1">
+              Sin exigirte ni castigarte. Tu bienestar físico y mental van primero.
+            </p>
+          </div>
+
+          <div class="p-5 rounded-3xl bg-gradient-to-br from-amber-500 to-orange-600 text-white shadow-md shadow-amber-500/20 flex flex-col justify-between">
+            <div>
+              <h3 class="font-bold text-base">Registrar Movimiento</h3>
+              <p class="text-amber-100 text-xs mt-1">
+                Anotá tus paseos, bici, yoga o baile en menos de 10 segundos.
+              </p>
+            </div>
+            <button onclick="app.openActivityRecordModal()" class="mt-4 w-full py-2.5 rounded-2xl bg-white text-amber-800 font-bold text-xs hover:bg-amber-50 transition-colors shadow-sm">
+              + Nueva Actividad
+            </button>
+          </div>
+        </div>
+
+        <!-- METAS PERSONALES AMABLES (SECCIÓN 17) -->
+        <div class="p-5 rounded-3xl bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 shadow-sm space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="font-bold text-stone-900 dark:text-white text-sm">
+                Metas Amables de Bienestar (Hoy)
+              </h3>
+              <p class="text-xs text-stone-500 dark:text-stone-400 mt-0.5">
+                Pequeños pasos cotidianos. Sin culpa si hoy no se pudo.
+              </p>
+            </div>
+            <button onclick="app.openAddGoalModal()" class="text-xs px-3 py-1.5 rounded-xl border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-300 font-semibold hover:bg-stone-50 dark:hover:bg-stone-700 transition-colors">
+              + Agregar Meta
+            </button>
+          </div>
+
+          <div id="habit-goals-list" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <!-- Metas cargadas dinámicamente -->
+          </div>
+        </div>
+
+        <!-- LISTA DE ACTIVIDADES REGISTRADAS -->
+        <div class="space-y-3">
+          <h3 class="font-bold text-stone-900 dark:text-white text-sm">
+            Movimientos y Actividades Recientes
+          </h3>
+          <div id="activity-records-list" class="space-y-2.5">
+            <!-- Actividades cargadas dinámicamente -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ==================== SUB-PANEL 3: MI ESPACIO (EMOCIONAL Y PRIVADO - SECCIÓN 18) ==================== -->
+      <div id="wellness-panel-emotional" class="space-y-6 hidden">
+        
+        <!-- PRIVACIDAD TOTAL -->
+        <div class="p-4 rounded-3xl bg-purple-50 dark:bg-purple-950/20 border border-purple-200 dark:border-purple-900/40 text-purple-900 dark:text-purple-200 text-xs flex items-start gap-3">
+          <span class="text-xl flex-shrink-0">🔒</span>
+          <div>
+            <span class="font-bold">Tu espacio 100% privado:</span> Las reflexiones que anotás acá se guardan únicamente en la memoria de este navegador. DíaSano nunca juzga ni vincula automáticamente tu alimentación con tus emociones. Es tu cuaderno personal para registrar cómo te sentís hoy.
+          </div>
+        </div>
+
+        <!-- FORMULARIO DE ENTRADA EMOCIONAL -->
+        <div class="p-6 rounded-3xl bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 shadow-sm space-y-4">
+          <h3 class="font-bold text-stone-900 dark:text-white text-sm">
+            ¿Cómo te sentís en este momento?
+          </h3>
+
+          <!-- Selector de Estado de Ánimo -->
+          <div class="grid grid-cols-4 sm:grid-cols-8 gap-2" id="mood-selector-grid">
+            <button type="button" onclick="app.selectMood('calma', '😌', 'En calma')" class="mood-btn p-2.5 rounded-2xl border border-stone-200 dark:border-stone-700 flex flex-col items-center gap-1 hover:border-brand-500 transition-all text-center" data-mood="calma">
+              <span class="text-2xl">😌</span>
+              <span class="text-[10px] font-medium text-stone-600 dark:text-stone-300">En calma</span>
+            </button>
+            <button type="button" onclick="app.selectMood('alegre', '😊', 'Alegre')" class="mood-btn p-2.5 rounded-2xl border border-stone-200 dark:border-stone-700 flex flex-col items-center gap-1 hover:border-brand-500 transition-all text-center" data-mood="alegre">
+              <span class="text-2xl">😊</span>
+              <span class="text-[10px] font-medium text-stone-600 dark:text-stone-300">Alegre</span>
+            </button>
+            <button type="button" onclick="app.selectMood('energia', '⚡', 'Con energía')" class="mood-btn p-2.5 rounded-2xl border border-stone-200 dark:border-stone-700 flex flex-col items-center gap-1 hover:border-brand-500 transition-all text-center" data-mood="energia">
+              <span class="text-2xl">⚡</span>
+              <span class="text-[10px] font-medium text-stone-600 dark:text-stone-300">Con energía</span>
+            </button>
+            <button type="button" onclick="app.selectMood('agradecido', '🌸', 'Agradecido/a')" class="mood-btn p-2.5 rounded-2xl border border-stone-200 dark:border-stone-700 flex flex-col items-center gap-1 hover:border-brand-500 transition-all text-center" data-mood="agradecido">
+              <span class="text-2xl">🌸</span>
+              <span class="text-[10px] font-medium text-stone-600 dark:text-stone-300">Agradecido</span>
+            </button>
+            <button type="button" onclick="app.selectMood('cansado', '🥱', 'Cansado/a')" class="mood-btn p-2.5 rounded-2xl border border-stone-200 dark:border-stone-700 flex flex-col items-center gap-1 hover:border-brand-500 transition-all text-center" data-mood="cansado">
+              <span class="text-2xl">🥱</span>
+              <span class="text-[10px] font-medium text-stone-600 dark:text-stone-300">Cansado</span>
+            </button>
+            <button type="button" onclick="app.selectMood('estresado', '😟', 'Estresado/a')" class="mood-btn p-2.5 rounded-2xl border border-stone-200 dark:border-stone-700 flex flex-col items-center gap-1 hover:border-brand-500 transition-all text-center" data-mood="estresado">
+              <span class="text-2xl">😟</span>
+              <span class="text-[10px] font-medium text-stone-600 dark:text-stone-300">Estresado</span>
+            </button>
+            <button type="button" onclick="app.selectMood('ansioso', '💭', 'Con muchas ideas')" class="mood-btn p-2.5 rounded-2xl border border-stone-200 dark:border-stone-700 flex flex-col items-center gap-1 hover:border-brand-500 transition-all text-center" data-mood="ansioso">
+              <span class="text-2xl">💭</span>
+              <span class="text-[10px] font-medium text-stone-600 dark:text-stone-300">Pensativo</span>
+            </button>
+            <button type="button" onclick="app.selectMood('desanimado', '🌧️', 'Desanimado/a')" class="mood-btn p-2.5 rounded-2xl border border-stone-200 dark:border-stone-700 flex flex-col items-center gap-1 hover:border-brand-500 transition-all text-center" data-mood="desanimado">
+              <span class="text-2xl">🌧️</span>
+              <span class="text-[10px] font-medium text-stone-600 dark:text-stone-300">Desanimado</span>
+            </button>
+          </div>
+
+          <!-- Factor de descanso -->
+          <div class="pt-2">
+            <label class="block text-xs font-medium text-stone-600 dark:text-stone-300 mb-1.5">
+              ¿Cómo sentiste tu descanso o sueño hoy?
+            </label>
+            <div class="flex items-center gap-2 flex-wrap">
+              <label class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-stone-200 dark:border-stone-700 text-xs cursor-pointer hover:bg-stone-50 dark:hover:bg-stone-700">
+                <input type="radio" name="sleep_factor" value="bueno" checked class="text-brand-600 focus:ring-brand-500">
+                <span>🛌 Buen descanso</span>
+              </label>
+              <label class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-stone-200 dark:border-stone-700 text-xs cursor-pointer hover:bg-stone-50 dark:hover:bg-stone-700">
+                <input type="radio" name="sleep_factor" value="regular" class="text-brand-600 focus:ring-brand-500">
+                <span>😴 Regular / Interrumpido</span>
+              </label>
+              <label class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-stone-200 dark:border-stone-700 text-xs cursor-pointer hover:bg-stone-50 dark:hover:bg-stone-700">
+                <input type="radio" name="sleep_factor" value="poco" class="text-brand-600 focus:ring-brand-500">
+                <span>☕ Poco sueño</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Cuaderno Libre -->
+          <div class="pt-2">
+            <label for="emotional-journal-text" class="block text-xs font-medium text-stone-600 dark:text-stone-300 mb-1.5">
+              Notas y reflexiones personales (opcional)
+            </label>
+            <textarea id="emotional-journal-text" rows="3" placeholder="¿Querés dejarte alguna reflexión para hoy? Podés escribir libremente lo que sientas..." class="w-full px-3.5 py-2.5 rounded-2xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-stone-900 dark:text-white text-xs focus:ring-2 focus:ring-brand-500 outline-none resize-none"></textarea>
+          </div>
+
+          <div class="flex justify-end pt-1">
+            <button onclick="app.saveEmotionalRecord()" class="px-5 py-2.5 rounded-2xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs shadow-md shadow-purple-600/20 transition-all">
+              Guardar en Mi Espacio
+            </button>
+          </div>
+        </div>
+
+        <!-- LISTA DE ENTRADAS EMOCIONALES PRIVADAS -->
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="font-bold text-stone-900 dark:text-white text-sm">
+              Tus reflexiones guardadas
+            </h3>
+            <button onclick="app.clearEmotionalRecords()" class="text-[11px] text-stone-400 hover:text-red-600 dark:hover:text-red-400 transition-colors">
+              Limpiar mis notas
+            </button>
+          </div>
+          <div id="emotional-records-list" class="space-y-2.5">
+            <!-- Entradas emocionales renderizadas dinámicamente -->
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ========================================================== -->
+    <!-- VISTA 10: CONFIGURACIÓN, REPORTE PROFESIONAL & DATOS       -->
+    <!-- ========================================================== -->
+    <section id="view-settings" class="space-y-6 hidden">
+      
+      <div>
+        <h2 class="text-2xl font-bold tracking-tight text-stone-900 dark:text-white">
+          Configuración, Reportes & Privacidad
+        </h2>
+        <p class="text-stone-500 dark:text-stone-400 text-xs sm:text-sm mt-0.5">
+          Generá resúmenes para tu equipo de salud, respaldá tu información y administrá tus preferencias locales.
+        </p>
+      </div>
+
+      <!-- TARJETA 1: RESUMEN PARA PROFESIONALES DE SALUD (SECCIONES 21 Y 22) -->
+      <div class="p-6 rounded-3xl bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 shadow-sm space-y-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-brand-50 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 flex items-center justify-center text-xl flex-shrink-0">
+            📋
+          </div>
+          <div>
+            <h3 class="font-bold text-stone-900 dark:text-white text-base">
+              Resumen para Profesionales (Médico o Nutricionista)
+            </h3>
+            <p class="text-xs text-stone-500 dark:text-stone-400 mt-0.5">
+              Exportá un informe claro de tus comidas registradas, valores de glucosa y actividad física para tu próxima consulta.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+          <div>
+            <label class="block text-xs font-semibold text-stone-700 dark:text-stone-300 mb-1.5">
+              Período a incluir:
+            </label>
+            <select id="report-period-select" class="w-full px-3 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-xs font-medium">
+              <option value="7">Últimos 7 días</option>
+              <option value="14" selected>Últimos 14 días (Recomendado)</option>
+              <option value="30">Últimos 30 días</option>
+              <option value="all">Todo el historial registrado</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-stone-700 dark:text-stone-300 mb-1.5">
+              Datos a incluir en el informe:
+            </label>
+            <div class="space-y-1.5 text-xs text-stone-700 dark:text-stone-300">
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" id="report-include-meals" checked class="rounded text-brand-600 focus:ring-brand-500">
+                <span>Comidas consumidas (Diario alimentario)</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" id="report-include-glucose" checked class="rounded text-brand-600 focus:ring-brand-500">
+                <span>Seguimiento de glucosa y promedios</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" id="report-include-activity" checked class="rounded text-brand-600 focus:ring-brand-500">
+                <span>Actividad física y hábitos</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer text-stone-400">
+                <input type="checkbox" id="report-include-emotional" class="rounded text-brand-600 focus:ring-brand-500">
+                <span>Mi Espacio Emocional (desmarcado por privacidad)</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-3 border-t border-stone-100 dark:border-stone-700/60">
+          <button onclick="app.previewProfessionalReport()" class="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs shadow-md shadow-brand-600/20 transition-colors flex items-center gap-1.5">
+            <span>👁️ Ver y Generar Informe</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- TARJETA 2: RESPALDO Y COPIA DE SEGURIDAD (JSON) -->
+      <div class="p-6 rounded-3xl bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 shadow-sm space-y-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-sky-50 dark:bg-sky-900/40 text-sky-600 dark:text-sky-400 flex items-center justify-center text-xl flex-shrink-0">
+            💾
+          </div>
+          <div>
+            <h3 class="font-bold text-stone-900 dark:text-white text-base">
+              Copia de Seguridad & Datos Locales
+            </h3>
+            <p class="text-xs text-stone-500 dark:text-stone-400 mt-0.5">
+              Tus datos son 100% tuyos y residen en tu navegador. Descargá un archivo de respaldo o restauralo en otro dispositivo.
+            </p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3 flex-wrap pt-2">
+          <button onclick="app.exportBackupJSON()" class="px-4 py-2.5 rounded-xl border border-sky-300 dark:border-sky-800/80 bg-sky-50 dark:bg-sky-950/30 text-sky-700 dark:text-sky-300 hover:bg-sky-100 text-xs font-semibold flex items-center gap-2 transition-colors">
+            <span>📥 Descargar Copia de Seguridad (.json)</span>
+          </button>
+
+          <label class="px-4 py-2.5 rounded-xl border border-stone-300 dark:border-stone-600 hover:bg-stone-100 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-200 text-xs font-semibold cursor-pointer flex items-center gap-2 transition-colors">
+            <span>📤 Restaurar desde Copia (.json)</span>
+            <input type="file" id="backup-file-input" accept=".json" class="hidden" onchange="app.importBackupJSON(event)">
+          </label>
+        </div>
+      </div>
+
+      <!-- TARJETA 3: RECORDATORIOS COTIDIANOS OPCIONALES (SECCIÓN 19) -->
+      <div class="p-6 rounded-3xl bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 shadow-sm space-y-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-amber-50 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400 flex items-center justify-center text-xl flex-shrink-0">
+            ⏰
+          </div>
+          <div>
+            <h3 class="font-bold text-stone-900 dark:text-white text-base">
+              Recordatorios Cotidianos Amables
+            </h3>
+            <p class="text-xs text-stone-500 dark:text-stone-400 mt-0.5">
+              Avisos discretos para organizar tu día sin estrés.
+            </p>
+          </div>
+        </div>
+
+        <div class="space-y-3 pt-2 text-xs text-stone-700 dark:text-stone-300">
+          <div class="flex items-center justify-between p-3 rounded-2xl bg-stone-50 dark:bg-stone-900/60 border border-stone-100 dark:border-stone-800">
+            <div>
+              <span class="font-semibold">Recordarme planificar las comidas de mañana</span>
+              <p class="text-[11px] text-stone-400">Te envía un aviso amable al final del día.</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <input type="time" id="reminder-time-plan" value="20:30" class="px-2 py-1 rounded-lg border border-stone-200 dark:border-stone-700 text-xs bg-white dark:bg-stone-800">
+              <input type="checkbox" id="reminder-check-plan" class="rounded text-brand-600 focus:ring-brand-500" onchange="app.saveReminderSettings()">
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between p-3 rounded-2xl bg-stone-50 dark:bg-stone-900/60 border border-stone-100 dark:border-stone-800">
+            <div>
+              <span class="font-semibold">Recordarme hidratarme con agua</span>
+              <p class="text-[11px] text-stone-400">Un recordatorio amigable durante el día.</p>
+            </div>
+            <input type="checkbox" id="reminder-check-water" class="rounded text-brand-600 focus:ring-brand-500" onchange="app.saveReminderSettings()">
+          </div>
+
+          <div class="flex items-center justify-between p-3 rounded-2xl bg-stone-50 dark:bg-stone-900/60 border border-stone-100 dark:border-stone-800">
+            <div>
+              <span class="font-semibold">Aviso para medir glucosa 2h después de comer</span>
+              <p class="text-[11px] text-stone-400">Si registrás almuerzo o cena, te avisa en 2 horas.</p>
+            </div>
+            <input type="checkbox" id="reminder-check-glucose" class="rounded text-brand-600 focus:ring-brand-500" onchange="app.saveReminderSettings()">
+          </div>
+
+          <button onclick="app.requestNotificationPermission()" class="text-xs text-brand-600 dark:text-brand-400 hover:underline font-semibold flex items-center gap-1">
+            <span>🔔 Habilitar notificaciones en este navegador</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- TARJETA 4: PREFERENCIAS Y CIUDAD DE CLIMA -->
+      <div class="p-6 rounded-3xl bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 shadow-sm space-y-4">
+        <h3 class="font-bold text-stone-900 dark:text-white text-base">
+          Preferencias de Clima y Módulos
+        </h3>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+          <div>
+            <label class="block font-semibold text-stone-700 dark:text-stone-300 mb-1">
+              Ciudad de Argentina para el clima (Open-Meteo):
+            </label>
+            <select id="settings-weather-city" class="w-full px-3 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-xs font-medium" onchange="app.changeWeatherCity(this.value)">
+              <option value="Buenos Aires">Buenos Aires (CABA y GBA)</option>
+              <option value="Córdoba">Córdoba</option>
+              <option value="Rosario">Rosario</option>
+              <option value="Mendoza">Mendoza</option>
+              <option value="Tucumán">San Miguel de Tucumán</option>
+              <option value="Mar del Plata">Mar del Plata</option>
+              <option value="Salta">Salta</option>
+              <option value="Bariloche">San Carlos de Bariloche</option>
+              <option value="Neuquén">Neuquén</option>
+              <option value="La Plata">La Plata</option>
+              <option value="Santa Fe">Santa Fe</option>
+            </select>
+          </div>
+
+          <div class="space-y-2">
+            <span class="block font-semibold text-stone-700 dark:text-stone-300">
+              Personalización de la interfaz:
+            </span>
+            <label class="flex items-center gap-2 cursor-pointer text-stone-700 dark:text-stone-300">
+              <input type="checkbox" id="pref-show-glucose" checked class="rounded text-brand-600 focus:ring-brand-500" onchange="app.saveModulePreferences()">
+              <span>Mostrar módulo de seguimiento de Glucosa</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer text-stone-700 dark:text-stone-300">
+              <input type="checkbox" id="pref-show-emotional" checked class="rounded text-brand-600 focus:ring-brand-500" onchange="app.saveModulePreferences()">
+              <span>Mostrar Mi Espacio Emocional</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- TARJETA 5: PRIVACIDAD Y BORRADO DE DATOS (DERECHO AL OLVIDO) -->
+      <div class="p-6 rounded-3xl bg-red-50/50 dark:bg-red-950/20 border border-red-200/80 dark:border-red-900/50 shadow-sm space-y-3">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 flex items-center justify-center text-xl flex-shrink-0">
+            ⚠️
+          </div>
+          <div>
+            <h3 class="font-bold text-red-950 dark:text-red-300 text-sm">
+              Zona de Privacidad y Borrado Total de Datos
+            </h3>
+            <p class="text-xs text-red-800/80 dark:text-red-400 mt-0.5">
+              Podés restablecer la aplicación y eliminar absolutamente todos tus registros personales locales ("derecho al olvido").
+            </p>
+          </div>
+        </div>
+
+        <div class="pt-2">
+          <button onclick="app.openClearDataModal()" class="px-4 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs transition-colors shadow-sm">
+            Borrar todos mis datos de DíaSano
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ==================== MODAL DE DETALLE DE RECETA ==================== -->
+  <div id="recipe-modal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-stone-900/60 modal-backdrop hidden animate-fade-in" onclick="if(event.target === this) app.closeRecipeModal()">
+    <div class="bg-white dark:bg-stone-800 w-full max-w-2xl max-h-[92vh] rounded-3xl overflow-hidden shadow-2xl flex flex-col border border-stone-200 dark:border-stone-700">
+      
+      <div class="relative h-52 sm:h-64 w-full bg-stone-200 dark:bg-stone-700 flex-shrink-0">
+        <img id="modal-image" src="" alt="Receta" class="w-full h-full object-cover">
+        <button onclick="app.closeRecipeModal()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/75 transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+        <span id="modal-category" class="absolute bottom-4 left-4 text-xs font-bold uppercase tracking-wider px-3 py-1 bg-white/90 dark:bg-stone-900/90 text-brand-700 dark:text-brand-400 rounded-xl backdrop-blur-sm">
+          Almuerzo
+        </span>
+      </div>
+
+      <div class="p-6 overflow-y-auto space-y-6 flex-1 text-stone-800 dark:text-stone-200">
+        <div>
+          <h2 id="modal-title" class="text-2xl font-bold text-stone-900 dark:text-white"></h2>
+          <div class="flex flex-wrap items-center gap-2 mt-2 text-xs">
+            <span id="modal-time" class="px-2.5 py-1 bg-stone-100 dark:bg-stone-700 rounded-lg text-stone-600 dark:text-stone-300 font-medium">⏱️ 25 min</span>
+            <span id="modal-difficulty" class="px-2.5 py-1 bg-stone-100 dark:bg-stone-700 rounded-lg text-stone-600 dark:text-stone-300 font-medium">Fácil</span>
+            <span id="modal-cost" class="px-2.5 py-1 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 rounded-lg font-medium">💰 Económico</span>
+          </div>
+        </div>
+
+        <!-- SELECTOR DE PORCIONES DINÁMICO -->
+        <div class="p-4 rounded-2xl bg-stone-50 dark:bg-stone-900/60 border border-stone-200 dark:border-stone-700/80 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-bold text-stone-700 dark:text-stone-300">Ajustar porciones:</span>
+            <span class="text-xs text-stone-400">Recalcula cantidades y carbohidratos</span>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button onclick="app.setModalServings(1)" id="btn-serv-1" class="serv-btn flex-1 py-1.5 rounded-xl text-xs font-semibold border border-stone-200 dark:border-stone-700 hover:border-brand-500">1 persona</button>
+            <button onclick="app.setModalServings(2)" id="btn-serv-2" class="serv-btn flex-1 py-1.5 rounded-xl text-xs font-semibold border border-stone-200 dark:border-stone-700 hover:border-brand-500">2 personas</button>
+            <button onclick="app.setModalServings(4)" id="btn-serv-4" class="serv-btn flex-1 py-1.5 rounded-xl text-xs font-semibold border border-stone-200 dark:border-stone-700 hover:border-brand-500">4 personas</button>
+            <div class="flex items-center gap-1">
+              <input type="number" id="custom-servings-input" min="1" max="20" class="w-14 py-1 px-2 text-center text-xs rounded-xl border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-800" placeholder="Otro" onchange="app.setCustomServings(this.value)">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 pt-2 border-t border-stone-200/60 dark:border-stone-700/60 text-xs">
+            <div class="p-2 rounded-xl bg-white dark:bg-stone-800 border border-stone-100 dark:border-stone-700">
+              <span class="text-stone-400 block text-[11px]">Carbohidratos estimados:</span>
+              <span id="modal-carbs-val" class="text-base font-bold text-brand-600 dark:text-brand-400">28 g</span>
+              <span class="text-[10px] text-stone-400 block">por porción</span>
+            </div>
+            <div class="p-2 rounded-xl bg-white dark:bg-stone-800 border border-stone-100 dark:border-stone-700">
+              <span class="text-stone-400 block text-[11px]">Calorías estimadas:</span>
+              <span id="modal-cals-val" class="text-base font-bold text-amber-600 dark:text-amber-400">380 kcal</span>
+              <span class="text-[10px] text-stone-400 block">por porción</span>
+            </div>
+          </div>
+          <p class="text-[11px] text-stone-400 italic">
+            * Valores nutricionales y carbohidratos estimados de referencia cotidiana, no clínicos.
+          </p>
+        </div>
+
+        <!-- Ingredientes con detección de faltantes -->
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <h3 class="font-bold text-stone-900 dark:text-white text-base">
+              Ingredientes
+            </h3>
+            <span id="modal-servings-badge" class="text-xs font-normal text-stone-400">para 2 porciones</span>
+          </div>
+          <p class="text-xs text-stone-500 dark:text-stone-400 mb-3">
+            Marcá la casilla del ingrediente si <strong>te falta</strong> para ver su alternativa y recalcular carbohidratos.
+          </p>
+          <ul id="modal-ingredients-list" class="space-y-2 text-sm"></ul>
+        </div>
+
+        <!-- Preparación paso a paso -->
+        <div>
+          <h3 class="font-bold text-stone-900 dark:text-white text-base mb-3">
+            Preparación paso a paso
+          </h3>
+          <div id="modal-instructions-list" class="space-y-3 text-sm"></div>
+        </div>
+
+        <!-- Sustituciones de ingredientes -->
+        <div id="modal-substitutions-card" class="p-4 rounded-2xl bg-emerald-50/70 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800/40 space-y-2">
+          <h4 class="font-bold text-emerald-900 dark:text-emerald-300 text-xs flex items-center gap-1.5 uppercase tracking-wide">
+            <span>🔄</span> ¿Te falta algún ingrediente? Sustituciones posibles:
+          </h4>
+          <div id="modal-substitutions-list" class="text-xs space-y-1.5 text-stone-700 dark:text-stone-300"></div>
+        </div>
+
+      </div>
+
+      <!-- Barra de acciones en pie de modal -->
+      <div class="p-4 bg-stone-50 dark:bg-stone-900 border-t border-stone-200 dark:border-stone-700 flex items-center justify-between gap-2 sm:gap-3 flex-shrink-0 flex-wrap">
+        <button onclick="app.toggleModalFavorite()" id="modal-fav-btn" class="flex items-center gap-2 px-3 sm:px-4 py-2.5 rounded-xl border border-stone-300 dark:border-stone-600 text-xs sm:text-sm font-semibold hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors">
+          <span id="modal-fav-icon">🤍</span>
+          <span id="modal-fav-text">Favoritos</span>
+        </button>
+
+        <button onclick="app.addCurrentRecipeToShoppingList()" class="flex items-center gap-1.5 px-3 sm:px-4 py-2.5 rounded-xl border border-emerald-500 bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 text-xs sm:text-sm font-semibold transition-colors" title="Añadir ingredientes a la lista de compras">
+          <span>🛒</span>
+          <span class="hidden sm:inline">Añadir a compras</span>
+        </button>
+
+        <!-- Acciones especiales para recetas creadas por el usuario -->
+        <div id="custom-recipe-modal-actions" class="hidden flex items-center gap-1.5">
+          <button onclick="app.editCurrentCustomRecipe()" title="Editar receta casera" class="p-2.5 rounded-xl border border-purple-200 dark:border-purple-800/80 bg-purple-50 dark:bg-purple-950/30 text-purple-700 dark:text-purple-300 hover:bg-purple-100 text-xs font-semibold flex items-center gap-1 transition-colors">
+            <span>✏️</span> <span class="hidden sm:inline">Editar</span>
+          </button>
+          <button onclick="app.deleteCurrentCustomRecipe()" title="Eliminar receta casera" class="p-2.5 rounded-xl border border-red-200 dark:border-red-900/50 bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400 hover:bg-red-100 text-xs font-semibold flex items-center gap-1 transition-colors">
+            <span>🗑️</span>
+          </button>
+        </div>
+
+        <button onclick="app.openPlanModalFromCurrentRecipe()" class="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs sm:text-sm font-semibold shadow-md shadow-brand-600/20 transition-all">
+          <span>📅</span>
+          <span>Agregar al calendario</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== MODAL: RESOLVER UNA COMIDA AHORA (ETAPA 3) ==================== -->
+  <div id="solve-now-modal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-stone-900/60 modal-backdrop hidden animate-fade-in" onclick="if(event.target === this) app.closeSolveNowModal()">
+    <div class="bg-white dark:bg-stone-800 w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl p-6 border border-stone-200 dark:border-stone-700 space-y-5 max-h-[90vh] overflow-y-auto">
+      
+      <div class="flex items-center justify-between pb-2 border-b border-stone-100 dark:border-stone-700">
+        <div>
+          <h3 class="font-bold text-stone-900 dark:text-white text-lg flex items-center gap-2">
+            <span>⏱️</span> Resolver una comida ahora
+          </h3>
+          <p class="text-stone-500 dark:text-stone-400 text-xs mt-0.5">
+            Te proponemos una comida concreta para no dar vueltas ni comer cualquier cosa.
+          </p>
+        </div>
+        <button onclick="app.closeSolveNowModal()" class="text-stone-400 hover:text-stone-600 text-lg">✕</button>
+      </div>
+
+      <!-- Preguntas del asistente -->
+      <div class="space-y-4 text-xs">
+        
+        <!-- Tiempo disponible -->
+        <div>
+          <label class="block font-bold text-stone-800 dark:text-stone-200 mb-1.5">1. ¿Cuánto tiempo tenés?</label>
+          <div class="grid grid-cols-4 gap-1.5">
+            <button onclick="app.setSolveParam('time', 5)" class="solve-time-btn p-2 rounded-xl border border-stone-200 dark:border-stone-700 font-semibold text-center hover:border-brand-500" data-val="5">5 min</button>
+            <button onclick="app.setSolveParam('time', 10)" class="solve-time-btn p-2 rounded-xl border border-stone-200 dark:border-stone-700 font-semibold text-center bg-brand-600 text-white border-brand-600" data-val="10">10 min</button>
+            <button onclick="app.setSolveParam('time', 15)" class="solve-time-btn p-2 rounded-xl border border-stone-200 dark:border-stone-700 font-semibold text-center hover:border-brand-500" data-val="15">15 min</button>
+            <button onclick="app.setSolveParam('time', 30)" class="solve-time-btn p-2 rounded-xl border border-stone-200 dark:border-stone-700 font-semibold text-center hover:border-brand-500" data-val="30">+25 min</button>
+          </div>
+        </div>
+
+        <!-- Ganas de cocinar -->
+        <div>
+          <label class="block font-bold text-stone-800 dark:text-stone-200 mb-1.5">2. ¿Tenés ganas de cocinar?</label>
+          <div class="grid grid-cols-3 gap-1.5">
+            <button onclick="app.setSolveParam('cook', 'none')" class="solve-cook-btn p-2 rounded-xl border border-stone-200 dark:border-stone-700 text-center hover:border-brand-500" data-val="none">Sin cocinar</button>
+            <button onclick="app.setSolveParam('cook', 'low')" class="solve-cook-btn p-2 rounded-xl border border-stone-200 dark:border-stone-700 font-semibold text-center bg-brand-600 text-white border-brand-600" data-val="low">Sartén / Poco</button>
+            <button onclick="app.setSolveParam('cook', 'normal')" class="solve-cook-btn p-2 rounded-xl border border-stone-200 dark:border-stone-700 text-center hover:border-brand-500" data-val="normal">Sí, normal</button>
+          </div>
+        </div>
+
+        <!-- Ingredientes disponibles -->
+        <div>
+          <label class="block font-bold text-stone-800 dark:text-stone-200 mb-1.5">3. ¿Qué tenés a mano? (Tocá los que tengas):</label>
+          <div class="flex flex-wrap gap-1.5">
+            <button onclick="app.toggleSolveIngredient('huevos')" class="solve-ing-chip px-2.5 py-1 rounded-lg border border-stone-200 dark:border-stone-700 font-medium" data-ing="huevos">🥚 Huevos</button>
+            <button onclick="app.toggleSolveIngredient('arroz')" class="solve-ing-chip px-2.5 py-1 rounded-lg border border-stone-200 dark:border-stone-700 font-medium" data-ing="arroz">🍚 Arroz</button>
+            <button onclick="app.toggleSolveIngredient('fideos')" class="solve-ing-chip px-2.5 py-1 rounded-lg border border-stone-200 dark:border-stone-700 font-medium" data-ing="fideos">🍝 Fideos</button>
+            <button onclick="app.toggleSolveIngredient('queso')" class="solve-ing-chip px-2.5 py-1 rounded-lg border border-stone-200 dark:border-stone-700 font-medium" data-ing="queso">🧀 Queso</button>
+            <button onclick="app.toggleSolveIngredient('tomate')" class="solve-ing-chip px-2.5 py-1 rounded-lg border border-stone-200 dark:border-stone-700 font-medium" data-ing="tomate">🍅 Tomate</button>
+            <button onclick="app.toggleSolveIngredient('pollo')" class="solve-ing-chip px-2.5 py-1 rounded-lg border border-stone-200 dark:border-stone-700 font-medium" data-ing="pollo">🍗 Pollo</button>
+            <button onclick="app.toggleSolveIngredient('atun')" class="solve-ing-chip px-2.5 py-1 rounded-lg border border-stone-200 dark:border-stone-700 font-medium" data-ing="atun">🐟 Atún</button>
+            <button onclick="app.toggleSolveIngredient('papa')" class="solve-ing-chip px-2.5 py-1 rounded-lg border border-stone-200 dark:border-stone-700 font-medium" data-ing="papa">🥔 Papas</button>
+            <button onclick="app.toggleSolveIngredient('verduras')" class="solve-ing-chip px-2.5 py-1 rounded-lg border border-stone-200 dark:border-stone-700 font-medium" data-ing="verduras">🥬 Verduras</button>
+            <button onclick="app.toggleSolveIngredient('lentejas')" class="solve-ing-chip px-2.5 py-1 rounded-lg border border-stone-200 dark:border-stone-700 font-medium" data-ing="lentejas">🥣 Lentejas</button>
+          </div>
+        </div>
+
+        <button onclick="app.calculateSolveProposal()" class="w-full py-3 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm shadow-md shadow-brand-600/20 transition-all flex items-center justify-center gap-2">
+          <span>✨ Encontrar mi comida ahora</span>
+        </button>
+
+      </div>
+
+      <!-- RESULTADO CONCRETO -->
+      <div id="solve-result-box" class="hidden p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 space-y-3 animate-fade-in">
+        <!-- Renderizado dinámico -->
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== MODAL: NO TENGO GANAS DE COCINAR (ETAPA 3) ==================== -->
+  <div id="lazy-cook-modal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-stone-900/60 modal-backdrop hidden animate-fade-in" onclick="if(event.target === this) app.closeLazyCookModal()">
+    <div class="bg-white dark:bg-stone-800 w-full max-w-2xl rounded-3xl overflow-hidden shadow-2xl p-6 border border-stone-200 dark:border-stone-700 space-y-5 max-h-[90vh] overflow-y-auto">
+      
+      <div class="flex items-center justify-between pb-2 border-b border-stone-100 dark:border-stone-700">
+        <div>
+          <h3 class="font-bold text-stone-900 dark:text-white text-lg flex items-center gap-2">
+            <span>🥱</span> No tengo ganas de cocinar
+          </h3>
+          <p class="text-stone-500 dark:text-stone-400 text-xs mt-0.5">
+            Es totalmente válido no tener energía hoy. Comidas sin culpa, prácticas y muy rápidas.
+          </p>
+        </div>
+        <button onclick="app.closeLazyCookModal()" class="text-stone-400 hover:text-stone-600 text-lg">✕</button>
+      </div>
+
+      <!-- Filtro por tiempo disponible -->
+      <div class="flex items-center gap-2 overflow-x-auto no-scrollbar text-xs">
+        <button onclick="app.setLazyTab('5')" id="lazy-tab-5" class="lazy-tab-btn px-3 py-1.5 rounded-xl font-semibold bg-brand-600 text-white shadow-sm">
+          ⚡ 5 minutos
+        </button>
+        <button onclick="app.setLazyTab('10')" id="lazy-tab-10" class="lazy-tab-btn px-3 py-1.5 rounded-xl font-medium bg-stone-100 dark:bg-stone-700 text-stone-700 dark:text-stone-300">
+          ⏱️ 10 minutos
+        </button>
+        <button onclick="app.setLazyTab('15')" id="lazy-tab-15" class="lazy-tab-btn px-3 py-1.5 rounded-xl font-medium bg-stone-100 dark:bg-stone-700 text-stone-700 dark:text-stone-300">
+          🍳 15 minutos
+        </button>
+        <button onclick="app.setLazyTab('nocook')" id="lazy-tab-nocook" class="lazy-tab-btn px-3 py-1.5 rounded-xl font-medium bg-stone-100 dark:bg-stone-700 text-stone-700 dark:text-stone-300">
+          🥗 Sin cocinar
+        </button>
+      </div>
+
+      <!-- Lista de recetas rápidas -->
+      <div id="lazy-recipes-list" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <!-- Renderizado dinámico -->
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== MODAL: MODO AHORRO Y SOBRAS (ETAPA 3) ==================== -->
+  <div id="budget-modal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-stone-900/60 modal-backdrop hidden animate-fade-in" onclick="if(event.target === this) app.closeBudgetModal()">
+    <div class="bg-white dark:bg-stone-800 w-full max-w-xl rounded-3xl overflow-hidden shadow-2xl p-6 border border-stone-200 dark:border-stone-700 space-y-5 max-h-[90vh] overflow-y-auto">
+      
+      <div class="flex items-center justify-between pb-2 border-b border-stone-100 dark:border-stone-700">
+        <div>
+          <h3 class="font-bold text-stone-900 dark:text-white text-lg flex items-center gap-2">
+            <span>💡</span> Modo Ahorro y Aprovechamiento
+          </h3>
+          <p class="text-stone-500 dark:text-stone-400 text-xs mt-0.5">
+            Cuidá tu bolsillo reutilizando ingredientes y reduciendo el desperdicio.
+          </p>
+        </div>
+        <button onclick="app.closeBudgetModal()" class="text-stone-400 hover:text-stone-600 text-lg">✕</button>
+      </div>
+
+      <!-- ACCIÓN ESTRELLA: GASTAR LO MENOS POSIBLE -->
+      <div class="p-5 rounded-2xl bg-gradient-to-r from-sky-50 to-blue-50 dark:from-sky-950/40 dark:to-blue-950/40 border border-sky-200 dark:border-sky-800 space-y-3">
+        <div class="flex items-start gap-3">
+          <span class="text-3xl">💰</span>
+          <div>
+            <h4 class="font-bold text-sky-950 dark:text-sky-200 text-sm">Quiero gastar lo menos posible esta semana</h4>
+            <p class="text-xs text-sky-800 dark:text-sky-400 mt-0.5 leading-relaxed">
+              Armamos un menú semanal súper económico reutilizando papas, legumbres, arroz, huevos y verduras de estación para comprar lo justo y no tirar nada.
+            </p>
+          </div>
+        </div>
+        <button onclick="app.generateSuperSaverMenu()" class="w-full py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-xs font-bold shadow-md shadow-sky-600/20 transition-all flex items-center justify-center gap-2">
+          <span>✨ Generar Menú de Costo Mínimo en Calendario</span>
+        </button>
+      </div>
+
+      <!-- SECCIÓN APROVECHAR SOBRAS -->
+      <div class="space-y-3">
+        <h4 class="font-bold text-stone-900 dark:text-white text-sm flex items-center gap-1.5">
+          <span>♻️</span> ¿Qué te sobró de ayer?
+        </h4>
+        <p class="text-xs text-stone-500 dark:text-stone-400">
+          Tocá una sobra para ver preparaciones deliciosas y seguras para transformarla:
+        </p>
+
+        <div class="flex flex-wrap gap-1.5 text-xs">
+          <button onclick="app.filterByLeftover('arroz')" class="leftover-chip px-3 py-1.5 rounded-xl border border-stone-200 dark:border-stone-700 hover:border-brand-500 font-medium">🍚 Arroz blanco</button>
+          <button onclick="app.filterByLeftover('pollo')" class="leftover-chip px-3 py-1.5 rounded-xl border border-stone-200 dark:border-stone-700 hover:border-brand-500 font-medium">🍗 Pollo cocido</button>
+          <button onclick="app.filterByLeftover('fideos')" class="leftover-chip px-3 py-1.5 rounded-xl border border-stone-200 dark:border-stone-700 hover:border-brand-500 font-medium">🍝 Fideos cocidos</button>
+          <button onclick="app.filterByLeftover('papa')" class="leftover-chip px-3 py-1.5 rounded-xl border border-stone-200 dark:border-stone-700 hover:border-brand-500 font-medium">🥔 Puré o papas</button>
+          <button onclick="app.filterByLeftover('verduras')" class="leftover-chip px-3 py-1.5 rounded-xl border border-stone-200 dark:border-stone-700 hover:border-brand-500 font-medium">🥬 Verduras que se ablandan</button>
+        </div>
+
+        <div id="leftover-recipes-results" class="space-y-2 pt-2"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== MODAL: AGREGAR ALIMENTO A DESPENSA (ETAPA 3) ==================== -->
+  <div id="add-pantry-modal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-stone-900/60 modal-backdrop hidden animate-fade-in" onclick="if(event.target === this) app.closeAddPantryModal()">
+    <div class="bg-white dark:bg-stone-800 w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl p-6 border border-stone-200 dark:border-stone-700 space-y-4">
+      
+      <div class="flex items-center justify-between">
+        <h3 class="font-bold text-stone-900 dark:text-white text-base flex items-center gap-2">
+          <span>🧊</span> Agregar Alimento a Despensa
+        </h3>
+        <button onclick="app.closeAddPantryModal()" class="text-stone-400 hover:text-stone-600">✕</button>
+      </div>
+
+      <!-- Sugerencias rápidas -->
+      <div>
+        <label class="block text-[11px] text-stone-400 mb-1">Carga rápida con un clic:</label>
+        <div class="flex flex-wrap gap-1 text-[11px]">
+          <span onclick="app.quickFillPantry('Huevos', '6 u', 'heladera')" class="px-2 py-0.5 rounded-lg bg-stone-100 dark:bg-stone-700 text-stone-700 dark:text-stone-300 cursor-pointer hover:bg-brand-50">🥚 Huevos</span>
+          <span onclick="app.quickFillPantry('Arroz', '1 kg', 'alacena')" class="px-2 py-0.5 rounded-lg bg-stone-100 dark:bg-stone-700 text-stone-700 dark:text-stone-300 cursor-pointer hover:bg-brand-50">🍚 Arroz</span>
+          <span onclick="app.quickFillPantry('Fideos', '500 g', 'alacena')" class="px-2 py-0.5 rounded-lg bg-stone-100 dark:bg-stone-700 text-stone-700 dark:text-stone-300 cursor-pointer hover:bg-brand-50">🍝 Fideos</span>
+          <span onclick="app.quickFillPantry('Queso', '300 g', 'heladera')" class="px-2 py-0.5 rounded-lg bg-stone-100 dark:bg-stone-700 text-stone-700 dark:text-stone-300 cursor-pointer hover:bg-brand-50">🧀 Queso</span>
+          <span onclick="app.quickFillPantry('Tomates', '3 u', 'heladera')" class="px-2 py-0.5 rounded-lg bg-stone-100 dark:bg-stone-700 text-stone-700 dark:text-stone-300 cursor-pointer hover:bg-brand-50">🍅 Tomates</span>
+          <span onclick="app.quickFillPantry('Atún en lata', '1 lata', 'alacena')" class="px-2 py-0.5 rounded-lg bg-stone-100 dark:bg-stone-700 text-stone-700 dark:text-stone-300 cursor-pointer hover:bg-brand-50">🐟 Atún</span>
+        </div>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block font-semibold text-stone-700 dark:text-stone-300 mb-1">Alimento:</label>
+          <input type="text" id="pantry-input-name" placeholder="ej: Zapallitos, Leche, Pollo congelado..." class="w-full px-3 py-2 rounded-xl bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-sm focus:outline-none">
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block font-semibold text-stone-700 dark:text-stone-300 mb-1">Cantidad aprox:</label>
+            <input type="text" id="pantry-input-amount" placeholder="ej: 4 u, 500 g" class="w-full px-3 py-2 rounded-xl bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-xs focus:outline-none">
+          </div>
+          <div>
+            <label class="block font-semibold text-stone-700 dark:text-stone-300 mb-1">Ubicación:</label>
+            <select id="pantry-input-location" class="w-full px-3 py-2 rounded-xl bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-xs focus:outline-none">
+              <option value="heladera">🧊 Heladera</option>
+              <option value="alacena">🥫 Alacena</option>
+              <option value="freezer">❄️ Freezer</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-stone-700 dark:text-stone-300 mb-1">Fecha de vencimiento (opcional):</label>
+          <input type="date" id="pantry-input-expire" class="w-full px-3 py-2 rounded-xl bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-xs focus:outline-none">
+        </div>
+
+        <div class="flex items-center gap-2 pt-1">
+          <input type="checkbox" id="pantry-input-running-out" class="w-4 h-4 accent-amber-600 rounded">
+          <label for="pantry-input-running-out" class="text-stone-600 dark:text-stone-300 text-xs cursor-pointer">
+            Está por acabarse (para acordarme de comprar)
+          </label>
+        </div>
+      </div>
+
+      <div class="pt-2 flex items-center justify-end gap-2">
+        <button onclick="app.closeAddPantryModal()" class="px-4 py-2 rounded-xl border border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-300 text-xs font-semibold">
+          Cancelar
+        </button>
+        <button onclick="app.confirmAddPantryModal()" class="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold shadow-md shadow-brand-600/20">
+          Guardar en despensa
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== MODAL PARA PLANIFICAR COMIDA EN CALENDARIO ==================== -->
+  <div id="plan-modal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-stone-900/60 modal-backdrop hidden animate-fade-in" onclick="if(event.target === this) app.closePlanModal()">
+    <div class="bg-white dark:bg-stone-800 w-full max-w-md rounded-3xl overflow-hidden shadow-2xl p-6 border border-stone-200 dark:border-stone-700 space-y-4">
+      
+      <div class="flex items-center justify-between">
+        <h3 class="font-bold text-stone-900 dark:text-white text-base flex items-center gap-2">
+          <span>📅</span> Planificar Comida
+        </h3>
+        <button onclick="app.closePlanModal()" class="text-stone-400 hover:text-stone-600">✕</button>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block font-semibold text-stone-700 dark:text-stone-300 mb-1">Fecha:</label>
+          <input type="date" id="plan-input-date" class="w-full px-3 py-2 rounded-xl bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-sm font-semibold focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block font-semibold text-stone-700 dark:text-stone-300 mb-1">Momento del día:</label>
+          <select id="plan-input-mealtype" class="w-full px-3 py-2 rounded-xl bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-xs focus:outline-none">
+            <option value="almuerzo">☀️ Almuerzo</option>
+            <option value="cena">🌙 Cena</option>
+            <option value="desayuno">🌅 Desayuno</option>
+            <option value="merienda">☕ Merienda</option>
+            <option value="snack">🍎 Snack</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-stone-700 dark:text-stone-300 mb-1">Comida o Receta:</label>
+          <input type="text" id="plan-input-name" placeholder="Elegí de recetas o escribí una comida..." class="w-full px-3 py-2 rounded-xl bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-sm focus:outline-none">
+          <input type="hidden" id="plan-input-recipe-id" value="">
+        </div>
+
+        <div class="flex items-center justify-between pt-1 text-[11px] text-stone-400">
+          <span>¿Querés usar una receta?</span>
+          <button onclick="app.openRecipeSelectorForPlan()" class="text-brand-600 dark:text-brand-400 font-semibold hover:underline">
+            Elegir de la biblioteca →
+          </button>
+        </div>
+      </div>
+
+      <div class="pt-2 flex items-center justify-end gap-2">
+        <button onclick="app.closePlanModal()" class="px-4 py-2 rounded-xl border border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-300 text-xs font-semibold">
+          Cancelar
+        </button>
+        <button onclick="app.confirmPlanModal()" class="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold shadow-md shadow-brand-600/20">
+          Guardar en Calendario
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== MODAL PARA AGREGAR PRODUCTO A COMPRAS ==================== -->
+  <div id="add-shopping-modal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-stone-900/60 modal-backdrop hidden animate-fade-in" onclick="if(event.target === this) app.closeAddShoppingModal()">
+    <div class="bg-white dark:bg-stone-800 w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl p-6 border border-stone-200 dark:border-stone-700 space-y-4">
+      
+      <div class="flex items-center justify-between">
+        <h3 class="font-bold text-stone-900 dark:text-white text-base flex items-center gap-2">
+          <span>🛒</span> Agregar Producto
+        </h3>
+        <button onclick="app.closeAddShoppingModal()" class="text-stone-400 hover:text-stone-600">✕</button>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block font-semibold text-stone-700 dark:text-stone-300 mb-1">Producto:</label>
+          <input type="text" id="shop-input-name" placeholder="ej: Café molido, Manzanas, Rollo de cocina..." class="w-full px-3 py-2 rounded-xl bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-sm focus:outline-none">
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block font-semibold text-stone-700 dark:text-stone-300 mb-1">Cantidad aprox:</label>
+            <input type="text" id="shop-input-amount" placeholder="ej: 1 paquete, 1 kg" class="w-full px-3 py-2 rounded-xl bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-xs focus:outline-none">
+          </div>
+          <div>
+            <label class="block font-semibold text-stone-700 dark:text-stone-300 mb-1">Rubro:</label>
+            <select id="shop-input-category" class="w-full px-3 py-2 rounded-xl bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-xs focus:outline-none">
+              <option value="Verdulería">🥬 Verdulería</option>
+              <option value="Carnicería">🥩 Carnicería / Granja</option>
+              <option value="Lácteos">🧀 Lácteos y Huevos</option>
+              <option value="Almacén">🌾 Almacén y Secos</option>
+              <option value="Otros" selected>🛒 Varios / Hogar</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-2 flex items-center justify-end gap-2">
+        <button onclick="app.closeAddShoppingModal()" class="px-4 py-2 rounded-xl border border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-300 text-xs font-semibold">
+          Cancelar
+        </button>
+        <button onclick="app.confirmAddShoppingModal()" class="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold shadow-md shadow-brand-600/20">
+          Agregar a la lista
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== MODAL DE REGISTRO DE GLUCOSA (SECCIÓN 16) ==================== -->
+  <div id="glucose-record-modal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-stone-900/60 modal-backdrop hidden animate-fade-in" onclick="if(event.target === this) app.closeGlucoseRecordModal()">
+    <div class="bg-white dark:bg-stone-800 w-full max-w-md rounded-3xl overflow-hidden shadow-2xl border border-stone-200 dark:border-stone-700 p-5 sm:p-6 space-y-4">
+      
+      <div class="flex items-center justify-between">
+        <h3 class="font-bold text-stone-900 dark:text-white text-base flex items-center gap-2">
+          <span>🩸</span> <span>Registrar Medición de Glucosa</span>
+        </h3>
+        <button onclick="app.closeGlucoseRecordModal()" class="text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 p-1">
+          ✕
+        </button>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block font-semibold text-stone-700 dark:text-stone-300 mb-1">
+            Valor de glucosa (mg/dL) *
+          </label>
+          <div class="relative">
+            <input type="number" id="glucose-input-value" min="20" max="600" placeholder="Ej. 110" class="w-full px-3.5 py-2.5 rounded-2xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-base font-bold text-stone-900 dark:text-white focus:ring-2 focus:ring-brand-500 outline-none">
+            <span class="absolute right-3.5 top-2.5 text-stone-400 font-medium text-xs">mg/dL</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block font-semibold text-stone-700 dark:text-stone-300 mb-1">Fecha</label>
+            <input type="date" id="glucose-input-date" class="w-full px-3 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-xs">
+          </div>
+          <div>
+            <label class="block font-semibold text-stone-700 dark:text-stone-300 mb-1">Hora</label>
+            <input type="time" id="glucose-input-time" class="w-full px-3 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-xs">
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-stone-700 dark:text-stone-300 mb-1">
+            Momento / Contexto de la medición
+          </label>
+          <select id="glucose-input-moment" class="w-full px-3 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-xs">
+            <option value="ayunas">En ayunas / Basal (Al despertar)</option>
+            <option value="pre_almuerzo">Antes del almuerzo</option>
+            <option value="post_almuerzo">2h posprandial (después del almuerzo)</option>
+            <option value="pre_cena">Antes de la cena</option>
+            <option value="post_cena">2h posprandial (después de la cena)</option>
+            <option value="antes_dormir">Antes de acostarse</option>
+            <option value="nocturno">Durante la noche</option>
+            <option value="otro">Otro momento</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-stone-700 dark:text-stone-300 mb-1">
+            Vincular con comida consumida (opcional)
+          </label>
+          <input type="text" id="glucose-input-meal" placeholder="Ej. Fideos con salsa y ensalada mixta" class="w-full px-3 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-xs">
+        </div>
+
+        <div>
+          <label class="block font-semibold text-stone-700 dark:text-stone-300 mb-1">
+            Sensaciones físicas o notas (opcional)
+          </label>
+          <input type="text" id="glucose-input-notes" placeholder="Ej. Caminé 15 min después, me sentí con buena energía" class="w-full px-3 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-xs">
+        </div>
+      </div>
+
+      <div class="pt-2 flex items-center justify-end gap-2 border-t border-stone-100 dark:border-stone-700/60">
+        <button onclick="app.closeGlucoseRecordModal()" class="px-4 py-2 rounded-xl border border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-300 text-xs font-semibold">
+          Cancelar
+        </button>
+        <button onclick="app.saveGlucoseRecord()" class="px-5 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs shadow-md shadow-brand-600/20">
+          Guardar Medición
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== MODAL DE RANGOS DE GLUCOSA ==================== -->
+  <div id="glucose-settings-modal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-stone-900/60 modal-backdrop hidden animate-fade-in" onclick="if(event.target === this) app.closeGlucoseSettingsModal()">
+    <div class="bg-white dark:bg-stone-800 w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl border border-stone-200 dark:border-stone-700 p-5 sm:p-6 space-y-4">
+      
+      <div class="flex items-center justify-between">
+        <h3 class="font-bold text-stone-900 dark:text-white text-base">
+          Tus Rangos de Referencia
+        </h3>
+        <button onclick="app.closeGlucoseSettingsModal()" class="text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 p-1">✕</button>
+      </div>
+
+      <p class="text-xs text-stone-500 dark:text-stone-400">
+        Personalizá los valores indicados por tu médico o diabetólogo para evaluar tus lecturas cotidianas.
+      </p>
+
+      <div class="space-y-3 text-xs">
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block font-semibold text-stone-700 dark:text-stone-300 mb-1">Ayunas Mínimo</label>
+            <input type="number" id="range-fasting-min" value="70" class="w-full px-3 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-xs font-bold">
+          </div>
+          <div>
+            <label class="block font-semibold text-stone-700 dark:text-stone-300 mb-1">Ayunas Máximo</label>
+            <input type="number" id="range-fasting-max" value="130" class="w-full px-3 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-xs font-bold">
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-stone-700 dark:text-stone-300 mb-1">Posprandial 2h Máximo</label>
+          <input type="number" id="range-post-max" value="180" class="w-full px-3 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-xs font-bold">
+        </div>
+      </div>
+
+      <div class="pt-2 flex items-center justify-end gap-2 border-t border-stone-100 dark:border-stone-700/60">
+        <button onclick="app.closeGlucoseSettingsModal()" class="px-4 py-2 rounded-xl border border-stone-200 dark:border-stone-700 text-stone-600 text-xs font-semibold">
+          Cancelar
+        </button>
+        <button onclick="app.saveGlucoseSettings()" class="px-5 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs">
+          Guardar Rangos
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== MODAL DE ACTIVIDAD FÍSICA ==================== -->
+  <div id="activity-record-modal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-stone-900/60 modal-backdrop hidden animate-fade-in" onclick="if(event.target === this) app.closeActivityRecordModal()">
+    <div class="bg-white dark:bg-stone-800 w-full max-w-md rounded-3xl overflow-hidden shadow-2xl border border-stone-200 dark:border-stone-700 p-5 sm:p-6 space-y-4">
+      
+      <div class="flex items-center justify-between">
+        <h3 class="font-bold text-stone-900 dark:text-white text-base flex items-center gap-2">
+          <span>🏃</span> <span>Registrar Movimiento o Actividad</span>
+        </h3>
+        <button onclick="app.closeActivityRecordModal()" class="text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 p-1">✕</button>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block font-semibold text-stone-700 dark:text-stone-300 mb-1">Tipo de movimiento</label>
+          <select id="activity-input-type" class="w-full px-3 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-xs">
+            <option value="caminata">🚶 Caminata / Paseo</option>
+            <option value="bicicleta">🚲 Bicicleta</option>
+            <option value="baile">💃 Baile / Ritmos</option>
+            <option value="yoga">🧘 Yoga / Estiramiento suave</option>
+            <option value="tareas_hogar">🧹 Tareas activas del hogar</option>
+            <option value="fuerza_gym">🏋️ Ejercicios de fuerza / Gimnasio</option>
+            <option value="natacion">🏊 Natación</option>
+            <option value="deportes">⚽ Deporte recreativo</option>
+            <option value="otro">✨ Otro movimiento</option>
+          </select>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block font-semibold text-stone-700 dark:text-stone-300 mb-1">Duración (minutos)</label>
+            <input type="number" id="activity-input-duration" min="5" max="360" value="25" class="w-full px-3 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-xs font-bold">
+          </div>
+          <div>
+            <label class="block font-semibold text-stone-700 dark:text-stone-300 mb-1">Intensidad percibida</label>
+            <select id="activity-input-intensity" class="w-full px-3 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-xs">
+              <option value="suave">Suave y relajada</option>
+              <option value="moderada" selected>Moderada</option>
+              <option value="activa">Vigorosa / Activa</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-stone-700 dark:text-stone-300 mb-1">¿Cómo te sentiste después?</label>
+          <select id="activity-input-feeling" class="w-full px-3 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-xs">
+            <option value="energia">⚡ Con mucha energía renovada</option>
+            <option value="relajado" selected>😌 Relajado/a y en calma</option>
+            <option value="satisfecho">😊 Satisfecho/a de haberte movido</option>
+            <option value="cansado_bien">🥱 Cansado/a pero contento/a</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-stone-700 dark:text-stone-300 mb-1">Notas breves (opcional)</label>
+          <input type="text" id="activity-input-notes" placeholder="Ej. Salí a pasear por la plaza después de almorzar" class="w-full px-3 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-xs">
+        </div>
+      </div>
+
+      <div class="pt-2 flex items-center justify-end gap-2 border-t border-stone-100 dark:border-stone-700/60">
+        <button onclick="app.closeActivityRecordModal()" class="px-4 py-2 rounded-xl border border-stone-200 dark:border-stone-700 text-stone-600 text-xs font-semibold">
+          Cancelar
+        </button>
+        <button onclick="app.saveActivityRecord()" class="px-5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs shadow-md shadow-amber-600/20">
+          Guardar Actividad
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== MODAL DE AGREGAR META AMABLE ==================== -->
+  <div id="goal-modal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-stone-900/60 modal-backdrop hidden animate-fade-in" onclick="if(event.target === this) app.closeAddGoalModal()">
+    <div class="bg-white dark:bg-stone-800 w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl border border-stone-200 dark:border-stone-700 p-5 sm:p-6 space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="font-bold text-stone-900 dark:text-white text-base">Nueva Meta Amable</h3>
+        <button onclick="app.closeAddGoalModal()" class="text-stone-400 hover:text-stone-600 p-1">✕</button>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block font-semibold text-stone-700 dark:text-stone-300 mb-1">Nombre de la meta</label>
+          <input type="text" id="goal-input-name" placeholder="Ej. Tomar 2 litros de agua" class="w-full px-3 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-xs">
+        </div>
+        <div>
+          <label class="block font-semibold text-stone-700 dark:text-stone-300 mb-1">Ícono / Emoji</label>
+          <input type="text" id="goal-input-icon" value="💧" maxlength="4" class="w-20 text-center px-3 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-lg">
+        </div>
+      </div>
+
+      <div class="pt-2 flex items-center justify-end gap-2 border-t border-stone-100 dark:border-stone-700/60">
+        <button onclick="app.closeAddGoalModal()" class="px-4 py-2 rounded-xl border border-stone-200 text-stone-600 text-xs font-semibold">Cancelar</button>
+        <button onclick="app.saveCustomGoal()" class="px-5 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs">Guardar Meta</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL DE CIUDAD / CLIMA ==================== -->
+  <div id="weather-city-modal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-stone-900/60 modal-backdrop hidden animate-fade-in" onclick="if(event.target === this) app.closeWeatherCityModal()">
+    <div class="bg-white dark:bg-stone-800 w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl border border-stone-200 dark:border-stone-700 p-5 sm:p-6 space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="font-bold text-stone-900 dark:text-white text-base">📍 Ciudad y Clima</h3>
+        <button onclick="app.closeWeatherCityModal()" class="text-stone-400 hover:text-stone-600 p-1">✕</button>
+      </div>
+
+      <p class="text-xs text-stone-500 dark:text-stone-400">
+        Elegí tu ciudad argentina para obtener el pronóstico gratuito de Open-Meteo y propuestas de comida según la temperatura.
+      </p>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block font-semibold text-stone-700 dark:text-stone-300 mb-1">Ciudad:</label>
+          <select id="modal-weather-city-select" class="w-full px-3 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-xs font-medium">
+            <option value="Buenos Aires">Buenos Aires (CABA y GBA)</option>
+            <option value="Córdoba">Córdoba</option>
+            <option value="Rosario">Rosario</option>
+            <option value="Mendoza">Mendoza</option>
+            <option value="Tucumán">San Miguel de Tucumán</option>
+            <option value="Mar del Plata">Mar del Plata</option>
+            <option value="Salta">Salta</option>
+            <option value="Bariloche">San Carlos de Bariloche</option>
+            <option value="Neuquén">Neuquén</option>
+            <option value="La Plata">La Plata</option>
+            <option value="Santa Fe">Santa Fe</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-stone-700 dark:text-stone-300 mb-1">O ajustar sensación térmica manualmente:</label>
+          <div class="flex gap-1.5">
+            <button onclick="app.setManualWeather('caluroso')" class="flex-1 py-1.5 px-2 rounded-xl border border-stone-200 text-center hover:bg-amber-50 dark:hover:bg-amber-950/30 text-xs font-medium">
+              ☀️ Caluroso (>24°)
+            </button>
+            <button onclick="app.setManualWeather('templado')" class="flex-1 py-1.5 px-2 rounded-xl border border-stone-200 text-center hover:bg-emerald-50 dark:hover:bg-emerald-950/30 text-xs font-medium">
+              🌤️ Templado (18-24°)
+            </button>
+            <button onclick="app.setManualWeather('fresco')" class="flex-1 py-1.5 px-2 rounded-xl border border-stone-200 text-center hover:bg-sky-50 dark:hover:bg-sky-950/30 text-xs font-medium">
+              🍲 Fresco (&lt;17°)
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-2 flex items-center justify-end gap-2 border-t border-stone-100 dark:border-stone-700/60">
+        <button onclick="app.closeWeatherCityModal()" class="px-4 py-2 rounded-xl border border-stone-200 text-stone-600 text-xs font-semibold">Cerrar</button>
+        <button onclick="app.applyCityWeatherSelection()" class="px-5 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs">Actualizar Clima</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL DE INFORME PROFESIONAL (PREVISUALIZAR E IMPRIMIR) ==================== -->
+  <div id="modal-report-preview" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-stone-900/60 modal-backdrop hidden animate-fade-in" onclick="if(event.target === this) app.closeReportPreviewModal()">
+    <div class="modal-report-dialog bg-white dark:bg-stone-900 w-full max-w-4xl max-h-[92vh] rounded-3xl overflow-hidden shadow-2xl flex flex-col border border-stone-200 dark:border-stone-700">
+      
+      <!-- Barra superior no-imprimible -->
+      <div class="p-4 border-b border-stone-200 dark:border-stone-800 flex items-center justify-between no-print bg-stone-50 dark:bg-stone-800">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">📋</span>
+          <h3 class="font-bold text-stone-900 dark:text-white text-sm">
+            Resumen para Profesional de la Salud
+          </h3>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="window.print()" class="px-3.5 py-1.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold shadow-sm transition-colors flex items-center gap-1.5">
+            <span>🖨️ Imprimir / Guardar en PDF</span>
+          </button>
+          <button onclick="app.copyReportText()" class="px-3 py-1.5 rounded-xl border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-700 text-xs font-semibold transition-colors">
+            📋 Copiar texto
+          </button>
+          <button onclick="app.closeReportPreviewModal()" class="text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 p-1.5 text-base">✕</button>
+        </div>
+      </div>
+
+      <!-- Contenido del Reporte Formateado Imprimible -->
+      <div id="report-printable-content" class="p-6 sm:p-8 overflow-y-auto space-y-6 text-stone-900 dark:text-stone-100 bg-white dark:bg-stone-900">
+        <!-- Renderizado dinámicamente -->
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== MODAL DE IMPRESIÓN DEL MENÚ SEMANAL (PARA LA HELADERA) ==================== -->
+  <div id="modal-print-menu" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-stone-900/60 modal-backdrop hidden animate-fade-in" onclick="if(event.target === this) app.closePrintWeeklyMenuModal()">
+    <div class="modal-print-menu-dialog bg-white dark:bg-stone-900 w-full max-w-4xl max-h-[92vh] rounded-3xl overflow-hidden shadow-2xl flex flex-col border border-stone-200 dark:border-stone-700">
+      
+      <!-- Barra superior no-imprimible -->
+      <div class="p-4 border-b border-stone-200 dark:border-stone-800 flex items-center justify-between no-print bg-stone-50 dark:bg-stone-800">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">🖨️</span>
+          <div>
+            <h3 class="font-bold text-stone-900 dark:text-white text-sm">
+              Menú Semanal para la Heladera
+            </h3>
+            <p class="text-[11px] text-stone-500 dark:text-stone-400">Diseñado para imprimir en A4 y pegar con un imán en tu cocina.</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="window.print()" class="px-3.5 py-1.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold shadow-sm transition-colors flex items-center gap-1.5">
+            <span>🖨️ Imprimir / Guardar en PDF</span>
+          </button>
+          <button onclick="app.closePrintWeeklyMenuModal()" class="text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 p-1.5 text-base">✕</button>
+        </div>
+      </div>
+
+      <!-- Contenido del Menú Formateado Imprimible -->
+      <div id="print-weekly-menu-content" class="p-6 sm:p-8 overflow-y-auto space-y-4 text-stone-900 dark:text-stone-100 bg-white dark:bg-stone-900">
+        <!-- Renderizado dinámicamente -->
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== MODAL DE CONFIRMACIÓN DE BORRADO TOTAL ==================== -->
+  <div id="clear-data-modal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-stone-900/60 modal-backdrop hidden animate-fade-in" onclick="if(event.target === this) app.closeClearDataModal()">
+    <div class="bg-white dark:bg-stone-800 w-full max-w-md rounded-3xl overflow-hidden shadow-2xl border border-red-200 dark:border-red-900/50 p-6 space-y-4">
+      <div class="flex items-center gap-3 text-red-600">
+        <span class="text-2xl">⚠️</span>
+        <h3 class="font-bold text-base text-stone-900 dark:text-white">¿Restablecer aplicación y borrar todo?</h3>
+      </div>
+      <p class="text-xs text-stone-600 dark:text-stone-300 leading-relaxed">
+        Esta acción eliminará de forma irreversible todas tus comidas planificadas, registros del diario alimentario, despensa, lista de compras, historial de glucosa y notas emocionales guardadas en este dispositivo.
+      </p>
+      <div class="pt-1">
+        <label class="block text-xs font-semibold text-stone-700 dark:text-stone-300 mb-1">
+          Escribí <span class="text-red-600 font-mono font-bold">BORRAR</span> para confirmar:
+        </label>
+        <input type="text" id="clear-data-confirm-input" placeholder="BORRAR" class="w-full px-3 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-xs font-bold text-stone-900 dark:text-white uppercase">
+      </div>
+      <div class="pt-2 flex items-center justify-end gap-2 border-t border-stone-100 dark:border-stone-700/60">
+        <button onclick="app.closeClearDataModal()" class="px-4 py-2 rounded-xl border border-stone-200 text-stone-600 text-xs font-semibold">Cancelar</button>
+        <button onclick="app.executeClearData()" class="px-5 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs">Eliminar definitivamente</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL "MÁS OPCIONES" PARA MÓVIL ==================== -->
+  <div id="more-menu-modal" class="fixed inset-0 z-50 flex items-end justify-center p-0 bg-stone-900/60 modal-backdrop hidden animate-fade-in" onclick="if(event.target === this) app.closeMoreMenu()">
+    <div class="bg-white dark:bg-stone-900 w-full max-w-lg rounded-t-3xl shadow-2xl border-t border-stone-200 dark:border-stone-800 p-5 space-y-3">
+      <div class="w-12 h-1.5 bg-stone-200 dark:bg-stone-700 rounded-full mx-auto mb-2"></div>
+      <h3 class="font-bold text-stone-900 dark:text-white text-sm px-2">Secciones y Herramientas</h3>
+
+      <div class="grid grid-cols-2 gap-2 text-xs font-semibold">
+        <button onclick="app.navigate('shopping'); app.closeMoreMenu();" class="p-3 rounded-2xl bg-stone-50 dark:bg-stone-800 flex items-center gap-2.5 text-stone-800 dark:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-700 text-left">
+          <span class="text-xl">🛒</span> <span>Lista de Compras</span>
+        </button>
+        <button onclick="app.navigate('recipes'); app.closeMoreMenu();" class="p-3 rounded-2xl bg-stone-50 dark:bg-stone-800 flex items-center gap-2.5 text-stone-800 dark:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-700 text-left">
+          <span class="text-xl">📖</span> <span>Biblioteca Recetas</span>
+        </button>
+        <button onclick="app.navigate('favorites'); app.closeMoreMenu();" class="p-3 rounded-2xl bg-stone-50 dark:bg-stone-800 flex items-center gap-2.5 text-stone-800 dark:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-700 text-left">
+          <span class="text-xl">⭐</span> <span>Favoritos</span>
+        </button>
+        <button onclick="app.navigate('history'); app.closeMoreMenu();" class="p-3 rounded-2xl bg-stone-50 dark:bg-stone-800 flex items-center gap-2.5 text-stone-800 dark:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-700 text-left">
+          <span class="text-xl">🕒</span> <span>Historial de Vistas</span>
+        </button>
+        <button onclick="app.navigate('settings'); app.closeMoreMenu();" class="col-span-2 p-3 rounded-2xl bg-brand-50 dark:bg-brand-950/30 text-brand-800 dark:text-brand-300 flex items-center gap-2.5 hover:bg-brand-100 text-left border border-brand-200 dark:border-brand-900/50">
+          <span class="text-xl">⚙️</span> <span>Ajustes, Datos & Reporte Médico</span>
+        </button>
+      </div>
+
+      <div class="pt-2 text-center">
+        <button onclick="app.closeMoreMenu()" class="w-full py-2.5 rounded-2xl bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 font-semibold text-xs">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL DE CREACIÓN / EDICIÓN DE RECETA CASERA (SECCIÓN 13) ==================== -->
+  <div id="custom-recipe-modal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-stone-900/60 modal-backdrop hidden animate-fade-in" onclick="if(event.target === this) app.closeCustomRecipeModal()">
+    <div class="bg-white dark:bg-stone-800 w-full max-w-2xl max-h-[92vh] rounded-3xl overflow-hidden shadow-2xl flex flex-col border border-stone-200 dark:border-stone-700">
+      
+      <div class="p-5 border-b border-stone-200 dark:border-stone-700 flex items-center justify-between">
+        <h3 id="custom-recipe-modal-title" class="font-bold text-stone-900 dark:text-white text-base flex items-center gap-2">
+          <span>🍳</span> <span>Crear Mi Propia Receta Casera</span>
+        </h3>
+        <button onclick="app.closeCustomRecipeModal()" class="text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 p-1">✕</button>
+      </div>
+
+      <div class="p-6 overflow-y-auto space-y-4 text-xs">
+        <input type="hidden" id="custom-recipe-id" value="">
+
+        <div class="space-y-1">
+          <label class="block font-semibold text-stone-700 dark:text-stone-300">Nombre de la receta *</label>
+          <input type="text" id="custom-recipe-name" placeholder="Ej. Tarta de zapallitos de la abuela" class="w-full px-3.5 py-2.5 rounded-2xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-sm font-bold text-stone-900 dark:text-white focus:ring-2 focus:ring-purple-500 outline-none">
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+          <div>
+            <label class="block font-semibold text-stone-700 dark:text-stone-300 mb-1">Categoría</label>
+            <select id="custom-recipe-category" class="w-full px-3 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-xs font-medium">
+              <option value="almuerzo">Almuerzo</option>
+              <option value="cena">Cena</option>
+              <option value="desayuno">Desayuno</option>
+              <option value="merienda">Merienda</option>
+              <option value="snack">Snack</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-semibold text-stone-700 dark:text-stone-300 mb-1">Dificultad</label>
+            <select id="custom-recipe-difficulty" class="w-full px-3 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-xs font-medium">
+              <option value="Fácil">Fácil</option>
+              <option value="Media">Media</option>
+              <option value="Elaborada">Elaborada</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-semibold text-stone-700 dark:text-stone-300 mb-1">Costo</label>
+            <select id="custom-recipe-cost" class="w-full px-3 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-xs font-medium">
+              <option value="Económico">Económico</option>
+              <option value="Medio">Medio</option>
+              <option value="Especial">Especial</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-semibold text-stone-700 dark:text-stone-300 mb-1">Porciones</label>
+            <input type="number" id="custom-recipe-servings" value="2" min="1" max="20" class="w-full px-3 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-xs font-bold text-center">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+          <div>
+            <label class="block font-semibold text-stone-700 dark:text-stone-300 mb-1">Prep (min)</label>
+            <input type="number" id="custom-recipe-time-prep" value="15" min="0" class="w-full px-3 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-xs font-bold text-center">
+          </div>
+          <div>
+            <label class="block font-semibold text-stone-700 dark:text-stone-300 mb-1">Cocción (min)</label>
+            <input type="number" id="custom-recipe-time-cook" value="25" min="0" class="w-full px-3 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-xs font-bold text-center">
+          </div>
+          <div>
+            <label class="block font-semibold text-stone-700 dark:text-stone-300 mb-1">Carbos est. (g/porc)</label>
+            <input type="number" id="custom-recipe-carbs" placeholder="Ej. 30" min="0" class="w-full px-3 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-xs font-bold text-center">
+          </div>
+          <div>
+            <label class="block font-semibold text-stone-700 dark:text-stone-300 mb-1">Calorías est. (kcal)</label>
+            <input type="number" id="custom-recipe-cals" placeholder="Ej. 350" min="0" class="w-full px-3 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-xs font-bold text-center">
+          </div>
+        </div>
+
+        <!-- LISTA DE INGREDIENTES DINÁMICOS -->
+        <div class="space-y-2 pt-2 border-t border-stone-100 dark:border-stone-700/60">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-stone-800 dark:text-stone-200">Ingredientes y cantidades *</span>
+            <button type="button" onclick="app.addCustomRecipeIngredientRow()" class="text-xs text-purple-600 dark:text-purple-400 font-bold hover:underline">
+              + Agregar Ingrediente
+            </button>
+          </div>
+          <div id="custom-recipe-ingredients-list" class="space-y-2">
+            <!-- Filas dinámicas -->
+          </div>
+        </div>
+
+        <!-- LISTA DE PASOS DINÁMICOS -->
+        <div class="space-y-2 pt-2 border-t border-stone-100 dark:border-stone-700/60">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-stone-800 dark:text-stone-200">Instrucciones paso a paso *</span>
+            <button type="button" onclick="app.addCustomRecipeStepRow()" class="text-xs text-purple-600 dark:text-purple-400 font-bold hover:underline">
+              + Agregar Paso
+            </button>
+          </div>
+          <div id="custom-recipe-steps-list" class="space-y-2">
+            <!-- Filas dinámicas de pasos -->
+          </div>
+        </div>
+
+        <!-- NOTAS PERSONALES Y SUSTITUCIONES -->
+        <div class="space-y-1 pt-2 border-t border-stone-100 dark:border-stone-700/60">
+          <label class="block font-semibold text-stone-700 dark:text-stone-300">Notas personales o sustituciones habituales</label>
+          <textarea id="custom-recipe-notes" rows="2" placeholder="Ej. Se puede reemplazar la masa por tapas de empanadas, o sumar queso rallado por arriba..." class="w-full px-3 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-xs outline-none focus:ring-2 focus:ring-purple-500 resize-none"></textarea>
+        </div>
+
+        <!-- ETIQUETAS -->
+        <div class="space-y-1">
+          <label class="block font-semibold text-stone-700 dark:text-stone-300">Etiquetas separadas por coma</label>
+          <input type="text" id="custom-recipe-tags" placeholder="Ej. economica, rapida, casera, sin_horno" class="w-full px-3 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-xs">
+        </div>
+      </div>
+
+      <div class="p-4 bg-stone-50 dark:bg-stone-900 border-t border-stone-200 dark:border-stone-700 flex items-center justify-end gap-2">
+        <button onclick="app.closeCustomRecipeModal()" class="px-4 py-2 rounded-xl border border-stone-200 text-stone-600 dark:text-stone-300 text-xs font-semibold">
+          Cancelar
+        </button>
+        <button onclick="app.saveCustomRecipeSubmit()" class="px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs shadow-md shadow-purple-600/20">
+          Guardar Receta
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== MODAL DE COMIDA HABITUAL FAVORITA (SECCIÓN 9) ==================== -->
+  <div id="add-custom-favorite-modal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-stone-900/60 modal-backdrop hidden animate-fade-in" onclick="if(event.target === this) app.closeAddCustomFavoriteModal()">
+    <div class="bg-white dark:bg-stone-800 w-full max-w-md rounded-3xl overflow-hidden shadow-2xl border border-stone-200 dark:border-stone-700 p-5 sm:p-6 space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="font-bold text-stone-900 dark:text-white text-base flex items-center gap-2">
+          <span>⭐</span> <span>Agregar Comida Habitual</span>
+        </h3>
+        <button onclick="app.closeAddCustomFavoriteModal()" class="text-stone-400 hover:text-stone-600 p-1">✕</button>
+      </div>
+
+      <p class="text-xs text-stone-500 dark:text-stone-400">
+        Anotá platos o comidas cotidianas que te gusten para tenerlas a mano y sumarlas a tu semana sin necesidad de crear una receta larga.
+      </p>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block font-semibold text-stone-700 dark:text-stone-300 mb-1">Nombre de la comida *</label>
+          <input type="text" id="custom-fav-name" placeholder="Ej. Milanesa con puré mixto" class="w-full px-3 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-xs font-bold text-stone-900 dark:text-white">
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block font-semibold text-stone-700 dark:text-stone-300 mb-1">Momento habitual</label>
+            <select id="custom-fav-meal-type" class="w-full px-3 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-xs">
+              <option value="almuerzo">Almuerzo</option>
+              <option value="cena">Cena</option>
+              <option value="desayuno">Desayuno</option>
+              <option value="merienda">Merienda</option>
+              <option value="snack">Snack</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-semibold text-stone-700 dark:text-stone-300 mb-1">Carbos est. (opcional)</label>
+            <input type="number" id="custom-fav-carbs" placeholder="Ej. 35 g" class="w-full px-3 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-xs">
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-stone-700 dark:text-stone-300 mb-1">Ingredientes habituales (opcional)</label>
+          <input type="text" id="custom-fav-ingredients" placeholder="Ej. carne, papa, calabaza, huevo" class="w-full px-3 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-xs">
+        </div>
+
+        <div>
+          <label class="block font-semibold text-stone-700 dark:text-stone-300 mb-1">Notas personales (opcional)</label>
+          <input type="text" id="custom-fav-notes" placeholder="Ej. Al horno, con limón y ensalada" class="w-full px-3 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-xs">
+        </div>
+      </div>
+
+      <div class="pt-2 flex items-center justify-end gap-2 border-t border-stone-100 dark:border-stone-700/60">
+        <button onclick="app.closeAddCustomFavoriteModal()" class="px-4 py-2 rounded-xl border border-stone-200 text-stone-600 text-xs font-semibold">Cancelar</button>
+        <button onclick="app.saveCustomFavoriteSubmit()" class="px-5 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs shadow-md shadow-brand-600/20">Guardar Favorito</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL DE MOVER COMIDA EN CALENDARIO (SECCIÓN 8) ==================== -->
+  <div id="move-meal-modal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-stone-900/60 modal-backdrop hidden animate-fade-in" onclick="if(event.target === this) app.closeMoveMealModal()">
+    <div class="bg-white dark:bg-stone-800 w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl border border-stone-200 dark:border-stone-700 p-5 sm:p-6 space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="font-bold text-stone-900 dark:text-white text-base flex items-center gap-2">
+          <span>📅</span> <span>Mover Comida Planificada</span>
+        </h3>
+        <button onclick="app.closeMoveMealModal()" class="text-stone-400 hover:text-stone-600 p-1">✕</button>
+      </div>
+
+      <input type="hidden" id="move-meal-plan-id" value="">
+      <p id="move-meal-name" class="text-xs font-bold text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-950/40 p-2.5 rounded-xl border border-brand-200 dark:border-brand-900/50">
+        Comida
+      </p>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block font-semibold text-stone-700 dark:text-stone-300 mb-1">Nueva fecha:</label>
+          <input type="date" id="move-meal-new-date" class="w-full px-3 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-xs font-bold">
+        </div>
+        <div>
+          <label class="block font-semibold text-stone-700 dark:text-stone-300 mb-1">Nuevo turno:</label>
+          <select id="move-meal-new-turn" class="w-full px-3 py-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 text-xs font-medium">
+            <option value="desayuno">🌅 Desayuno</option>
+            <option value="almuerzo">☀️ Almuerzo</option>
+            <option value="merienda">☕ Merienda</option>
+            <option value="cena">🌙 Cena</option>
+            <option value="snack">🍎 Snack</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="pt-2 flex items-center justify-end gap-2 border-t border-stone-100 dark:border-stone-700/60">
+        <button onclick="app.closeMoveMealModal()" class="px-4 py-2 rounded-xl border border-stone-200 text-stone-600 text-xs font-semibold">Cancelar</button>
+        <button onclick="app.confirmMoveMealPlan()" class="px-5 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs shadow-md shadow-brand-600/20">Mover Comida</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL DE SELECCIONAR RECETA PARA COMPRAS ==================== -->
+  <div id="select-recipe-shopping-modal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-stone-900/60 modal-backdrop hidden animate-fade-in" onclick="if(event.target === this) app.closeSelectRecipeShoppingModal()">
+    <div class="bg-white dark:bg-stone-800 w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl p-5 sm:p-6 border border-stone-200 dark:border-stone-700 space-y-4 max-h-[85vh] flex flex-col">
+      <div class="flex items-center justify-between">
+        <h3 class="font-bold text-stone-900 dark:text-white text-base flex items-center gap-2">
+          <span>🛒</span> <span>Añadir Ingredientes de una Receta</span>
+        </h3>
+        <button onclick="app.closeSelectRecipeShoppingModal()" class="text-stone-400 hover:text-stone-600 p-1">✕</button>
+      </div>
+
+      <p class="text-xs text-stone-500 dark:text-stone-400">
+        Elegí la receta que querés preparar. Los ingredientes que ya tengas en tu heladera/despensa no se añadirán para no duplicar compras.
+      </p>
+
+      <div class="relative">
+        <input 
+          type="text" 
+          id="select-recipe-shopping-search" 
+          placeholder="Buscar receta por nombre o ingrediente..." 
+          class="w-full px-3.5 py-2.5 rounded-xl bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-xs focus:ring-2 focus:ring-brand-500 outline-none"
+          oninput="app.filterSelectRecipeShoppingList()"
+        >
+      </div>
+
+      <div id="select-recipe-shopping-list" class="flex-1 overflow-y-auto space-y-2 pr-1 max-h-[50vh]">
+        <!-- Recetas dinámicas -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== BARRA DE NAVEGACIÓN MÓVIL (BOTTOM BAR) ==================== -->
+  <nav class="fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-stone-900/95 backdrop-blur-md border-t border-stone-200 dark:border-stone-800 flex items-center justify-around py-1.5 md:hidden">
+    
+    <button onclick="app.navigate('home')" id="mobile-nav-home" class="flex flex-col items-center gap-0.5 text-brand-600 dark:text-brand-400 py-1 px-1">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+      </svg>
+      <span class="text-[9px] font-medium">Inicio</span>
+    </button>
+
+    <button onclick="app.navigate('calendar')" id="mobile-nav-calendar" class="flex flex-col items-center gap-0.5 text-stone-500 dark:text-stone-400 py-1 px-1">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+      </svg>
+      <span class="text-[9px] font-medium">Menú</span>
+    </button>
+
+    <button onclick="app.navigate('diary')" id="mobile-nav-diary" class="flex flex-col items-center gap-0.5 text-stone-500 dark:text-stone-400 py-1 px-1">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+      </svg>
+      <span class="text-[9px] font-medium">Diario</span>
+    </button>
+
+    <button onclick="app.navigate('pantry')" id="mobile-nav-pantry" class="flex flex-col items-center gap-0.5 text-stone-500 dark:text-stone-400 py-1 px-1">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+      </svg>
+      <span class="text-[9px] font-medium">Despensa</span>
+    </button>
+
+    <button onclick="app.navigate('wellness')" id="mobile-nav-wellness" class="flex flex-col items-center gap-0.5 text-stone-500 dark:text-stone-400 py-1 px-1">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+      </svg>
+      <span class="text-[9px] font-medium">Bienestar</span>
+    </button>
+
+    <button onclick="app.openMoreMenu()" id="mobile-nav-more" class="flex flex-col items-center gap-0.5 text-stone-500 dark:text-stone-400 py-1 px-1">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+      <span class="text-[9px] font-medium">Más</span>
+    </button>
+
+  </nav>
+
+  <!-- ==================== TOAST NOTIFICACIÓN ==================== -->
+  <div id="toast" class="fixed bottom-20 md:bottom-6 left-1/2 -translate-x-1/2 z-50 bg-stone-900/90 dark:bg-white/90 text-white dark:text-stone-900 px-4 py-2.5 rounded-2xl shadow-xl text-xs font-semibold flex items-center gap-2 pointer-events-none opacity-0 transition-opacity duration-300">
+    <span id="toast-message">Mensaje</span>
+  </div>
+
+  <!-- Scripts de la aplicación (compatibles tanto con file:// como con servidores web) -->
+  <script src="js/recipes-data.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator && (location.protocol === 'http:' || location.protocol === 'https:')) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(err => {
+          console.log('ServiceWorker:', err.message);
+        });
+      });
+    }
+  </script>
+</body>
+</html>
