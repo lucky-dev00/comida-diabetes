@@ -1,0 +1,124 @@
+/* DíaSano - Estilos complementarios y variables de diseño */
+
+:root {
+  --primary: #059669;
+  --primary-light: #10b981;
+  --primary-dark: #047857;
+  --accent: #f59e0b;
+  --bg-warm: #fcfbf9;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  background-color: var(--bg-warm);
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Transiciones suaves */
+.transition-smooth {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Tarjeta de propuesta interactiva */
+.proposal-card {
+  box-shadow: 0 10px 25px -5px rgba(5, 150, 105, 0.08), 0 8px 10px -6px rgba(5, 150, 105, 0.04);
+}
+
+.dark .proposal-card {
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+}
+
+/* Ocultar barra de desplazamiento sin perder funcionalidad */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Modal backdrop blur */
+.modal-backdrop {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Animación de entrada de tarjetas */
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.97) translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeInScale 0.28s ease-out forwards;
+}
+
+/* Estilo para los pasos de receta interactivos */
+.step-checkbox:checked + label {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+/* Gráfico de Glucosa y Bienestar */
+.glucose-chart-point {
+  transition: r 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+.glucose-chart-point:hover {
+  r: 6px;
+}
+
+/* Selector de emociones */
+.mood-btn.active {
+  border-color: #059669;
+  background-color: rgba(5, 150, 105, 0.12);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.15);
+}
+
+/* ==================== ESTILOS DE IMPRESIÓN (INFORME Y MENÚ SEMANAL) ==================== */
+@media print {
+  body {
+    background-color: #ffffff !important;
+    color: #1c1917 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  header, nav, #toast, .no-print, button, #view-home, #view-calendar, #view-diary, #view-pantry, #view-shopping, #view-recipes, #view-favorites, #view-history, #view-wellness, #view-settings {
+    display: none !important;
+  }
+  #modal-report-preview:not(.hidden),
+  #modal-print-menu:not(.hidden) {
+    display: block !important;
+    position: static !important;
+    background: transparent !important;
+    padding: 0 !important;
+    z-index: 99999 !important;
+  }
+  #modal-report-preview:not(.hidden) .modal-report-dialog,
+  #modal-print-menu:not(.hidden) .modal-print-menu-dialog {
+    max-width: 100% !important;
+    width: 100% !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+    background: white !important;
+    color: black !important;
+  }
+  #modal-report-preview:not(.hidden) .modal-report-dialog *,
+  #modal-print-menu:not(.hidden) .modal-print-menu-dialog * {
+    color: black !important;
+  }
+  .print-header {
+    border-bottom: 2px solid #059669;
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+  }
+}
+
